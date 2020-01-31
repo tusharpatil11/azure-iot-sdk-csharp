@@ -8,14 +8,12 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Tracing;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public class FileUploadE2ETests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(FileUploadE2ETests)}_";
@@ -30,21 +28,24 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task FileUpload_SmallFile_Http()
         {
             string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
             await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task FileUpload_BigFile_Http()
         {
             string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
             await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task FileUpload_X509_SmallFile_Http()
         {
             string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);

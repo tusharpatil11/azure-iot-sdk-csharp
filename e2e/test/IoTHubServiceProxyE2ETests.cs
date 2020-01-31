@@ -3,21 +3,18 @@
 
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
     using TransportType = Microsoft.Azure.Devices.TransportType;
 
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
-    [TestCategory("ProxyE2ETests")]
     public class IoTHubServiceProxyE2ETests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(IoTHubServiceProxyE2ETests)}_";
@@ -34,7 +31,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task ServiceClient_Message_SendSingleMessage_WithProxy()
         {
             ServiceClientTransportSettings transportSettings = new ServiceClientTransportSettings();
@@ -44,7 +42,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendSingleMessageService(transportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task RegistryManager_AddAndRemoveDevice_WithProxy()
         {
             HttpTransportSettings httpTransportSettings = new HttpTransportSettings();
@@ -53,7 +52,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await RegistryManager_AddDevice(httpTransportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task JobClient_ScheduleAndRunTwinJob_WithProxy()
         {
             HttpTransportSettings httpTransportSettings = new HttpTransportSettings();

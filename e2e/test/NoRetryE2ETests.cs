@@ -1,14 +1,12 @@
 ﻿using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public class NoRetryE2ETests
     {
         private readonly string DevicePrefix = $"E2E_{nameof(NoRetryE2ETests)}_";
@@ -20,7 +18,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task FaultInjection_NoRecovery()
         {
             TestDevice testDevice = await TestDevice.GetTestDeviceAsync(DevicePrefix, TestDeviceType.Sasl).ConfigureAwait(false);
@@ -65,16 +64,17 @@ namespace Microsoft.Azure.Devices.E2ETests
                     await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
                 }
 
-                Assert.AreEqual(ConnectionStatus.Disconnected, lastConnectionStatus, $"Excepeted device to be {ConnectionStatus.Disconnected} but was {lastConnectionStatus}.");
-                Assert.IsFalse(connectionStatusChanges.ContainsKey(ConnectionStatus.Disconnected_Retrying), $"Shouldn't get {ConnectionStatus.Disconnected_Retrying} status change.");
+                Assert.Equal(ConnectionStatus.Disconnected, lastConnectionStatus);
+                Assert.False(connectionStatusChanges.ContainsKey(ConnectionStatus.Disconnected_Retrying), $"Shouldn't get {ConnectionStatus.Disconnected_Retrying} status change.");
                 int connected = connectionStatusChanges[ConnectionStatus.Connected];
-                Assert.AreEqual(1, connected, $"Should get {ConnectionStatus.Connected} once but was {connected}.");
+                Assert.Equal(1, connected);
                 int disconnected = connectionStatusChanges[ConnectionStatus.Disconnected];
-                Assert.AreEqual(1, disconnected, $"Should get {ConnectionStatus.Disconnected} once but was {disconnected}.");
+                Assert.Equal(1, disconnected);
             }
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Duplicated_NoPingpong()
         {
             TestDevice testDevice = await TestDevice.GetTestDeviceAsync(DevicePrefix, TestDeviceType.Sasl).ConfigureAwait(false);
@@ -122,12 +122,12 @@ namespace Microsoft.Azure.Devices.E2ETests
                     await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
                 }
 
-                Assert.AreEqual(ConnectionStatus.Disconnected, lastConnectionStatus, $"Excepeted device to be {ConnectionStatus.Disconnected} but was {lastConnectionStatus}.");
-                Assert.IsFalse(connectionStatusChanges.ContainsKey(ConnectionStatus.Disconnected_Retrying), $"Shouldn't get {ConnectionStatus.Disconnected_Retrying} status change.");
+                Assert.Equal(ConnectionStatus.Disconnected, lastConnectionStatus);
+                Assert.False(connectionStatusChanges.ContainsKey(ConnectionStatus.Disconnected_Retrying), $"Shouldn't get {ConnectionStatus.Disconnected_Retrying} status change.");
                 int connected = connectionStatusChanges[ConnectionStatus.Connected];
-                Assert.AreEqual(1, connected, $"Should get {ConnectionStatus.Connected} once but was {connected}.");
+                Assert.Equal(1, connected);
                 int disconnected = connectionStatusChanges[ConnectionStatus.Disconnected];
-                Assert.AreEqual(1, disconnected, $"Should get {ConnectionStatus.Disconnected} once but was {disconnected}.");
+                Assert.Equal(1, disconnected);
             }
         }
     }

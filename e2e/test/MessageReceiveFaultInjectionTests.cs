@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
@@ -10,12 +9,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
-    [TestCategory("IoTHub-FaultInjection")]
     public partial class MessageReceiveFaultInjectionTests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(MessageReceiveFaultInjectionTests)}_";
@@ -28,7 +25,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_TcpConnectionLossReceiveRecovery_Amqp()
         {
             await ReceiveMessageRecovery(
@@ -39,7 +37,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_TcpConnectionLossReceiveRecovery_AmqpWs()
         {
             await ReceiveMessageRecovery(
@@ -50,7 +49,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_TcpConnectionLossReceiveRecovery_Mqtt()
         {
             await ReceiveMessageRecovery(
@@ -62,7 +62,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 ).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_TcpConnectionLossReceiveRecovery_MqttWs()
         {
             await ReceiveMessageRecovery(
@@ -73,7 +74,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpConnectionLossReceiveRecovery_Amqp()
         {
             await ReceiveMessageRecovery(
@@ -84,7 +86,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpConnectionLossReceiveRecovery_AmqpWs()
         {
             await ReceiveMessageRecovery(
@@ -94,7 +97,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpSessionLossReceiveRecovery_Amqp()
         {
             await ReceiveMessageRecovery(
@@ -105,7 +109,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpSessionLossReceiveRecovery_AmqpWs()
         {
             await ReceiveMessageRecovery(
@@ -116,7 +121,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpC2DLinkDropReceiveRecovery_Amqp()
         {
             await ReceiveMessageRecovery(
@@ -127,7 +133,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpC2DLinkDropReceiveRecovery_AmqpWs()
         {
             await ReceiveMessageRecovery(
@@ -138,7 +145,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_GracefulShutdownReceiveRecovery_Amqp()
         {
             await ReceiveMessageRecovery(
@@ -149,7 +157,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_GracefulShutdownReceiveRecovery_AmqpWs()
         {
             await ReceiveMessageRecovery(
@@ -160,7 +169,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_GracefulShutdownReceiveRecovery_Mqtt()
         {
             await ReceiveMessageRecovery(
@@ -171,7 +181,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_GracefulShutdownReceiveRecovery_MqttWs()
         {
             await ReceiveMessageRecovery(

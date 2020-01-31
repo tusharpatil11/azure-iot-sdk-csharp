@@ -1,18 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public class ServiceClientE2ETests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(ServiceClientE2ETests)}_";
@@ -25,14 +23,15 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(TimeoutException))]
+        [Fact]
+        [IotHub]
         public async Task Message_TimeOutReachedResponse()
         {
-            await FastTimeout().ConfigureAwait(false);
+            await Assert.ThrowsAsync<TimeoutException>(() => FastTimeout()).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_NoTimeoutPassed()
         {
             await DefaultTimeout().ConfigureAwait(false);

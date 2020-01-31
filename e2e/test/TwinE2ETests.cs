@@ -3,17 +3,14 @@
 
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Tracing;
-using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
+using Xunit.Sdk;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public class TwinE2ETests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(TwinE2ETests)}_";
@@ -26,85 +23,99 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSetsReportedPropertyAndGetsItBack_Mqtt()
         {
             await Twin_DeviceSetsReportedPropertyAndGetsItBackSingleDevice(Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSetsReportedPropertyAndGetsItBack_MqttWs()
         {
             await Twin_DeviceSetsReportedPropertyAndGetsItBackSingleDevice(Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSetsReportedPropertyAndGetsItBack_Amqp()
         {
             await Twin_DeviceSetsReportedPropertyAndGetsItBackSingleDevice(Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSetsReportedPropertyAndGetsItBack_AmqpWs()
         {
             await Twin_DeviceSetsReportedPropertyAndGetsItBackSingleDevice(Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent_Mqtt()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent(Client.TransportType.Mqtt_Tcp_Only, SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent_MqttWs()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent(Client.TransportType.Mqtt_WebSocket_Only, SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
         
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent_Amqp()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent(Client.TransportType.Amqp_Tcp_Only, SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent_AmqpWs()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent(Client.TransportType.Amqp_WebSocket_Only, SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent_WithObseleteCallbackSetter_Mqtt()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent(Client.TransportType.Mqtt_Tcp_Only, SetTwinPropertyUpdateCallbackObsoleteHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent_WithObseleteCallbackSetter_MqttWs()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent(Client.TransportType.Mqtt_WebSocket_Only, SetTwinPropertyUpdateCallbackObsoleteHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent_WithObseleteCallbackSetter_Amqp()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent(Client.TransportType.Amqp_Tcp_Only, SetTwinPropertyUpdateCallbackObsoleteHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent_WithObseleteCallbackSetter_AmqpWs()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesEvent(Client.TransportType.Amqp_WebSocket_Only, SetTwinPropertyUpdateCallbackObsoleteHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesItOnNextGet_Mqtt()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesItOnNextGet(Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesItOnNextGet_MqttWs()
         {
             try
@@ -117,85 +128,99 @@ namespace Microsoft.Azure.Devices.E2ETests
             }
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesItOnNextGet_Amqp()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesItOnNextGet(Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceSetsDesiredPropertyAndDeviceReceivesItOnNextGet_AmqpWs()
         {
             await Twin_ServiceSetsDesiredPropertyAndDeviceReceivesItOnNextGet(Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSetsReportedPropertyAndServiceReceivesIt_Mqtt()
         {
             await Twin_DeviceSetsReportedPropertyAndServiceReceivesIt(Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSetsReportedPropertyAndServiceReceivesIt_MqttWs()
         {
             await Twin_DeviceSetsReportedPropertyAndServiceReceivesIt(Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSetsReportedPropertyAndServiceReceivesIt_Amqp()
         {
             await Twin_DeviceSetsReportedPropertyAndServiceReceivesIt(Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSetsReportedPropertyAndServiceReceivesIt_AmqpWs()
         {
             await Twin_DeviceSetsReportedPropertyAndServiceReceivesIt(Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceDoesNotCreateNullPropertyInCollection_Mqtt()
         {
             await Twin_ServiceDoesNotCreateNullPropertyInCollection(Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceDoesNotCreateNullPropertyInCollection_MqttWs()
         {
             await Twin_ServiceDoesNotCreateNullPropertyInCollection(Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceDoesNotCreateNullPropertyInCollection_Amqp()
         {
             await Twin_ServiceDoesNotCreateNullPropertyInCollection(Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ServiceDoesNotCreateNullPropertyInCollection_AmqpWs()
         {
             await Twin_ServiceDoesNotCreateNullPropertyInCollection(Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ClientHandlesRejectionInvalidPropertyName_Mqtt()
         {
             await Twin_ClientHandlesRejectionInvalidPropertyName(Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ClientHandlesRejectionInvalidPropertyName_MqttWs()
         {
             await Twin_ClientHandlesRejectionInvalidPropertyName(Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ClientHandlesRejectionInvalidPropertyName_Amqp()
         {
             await Twin_ClientHandlesRejectionInvalidPropertyName(Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_ClientHandlesRejectionInvalidPropertyName_AmqpWs()
         {
             await Twin_ClientHandlesRejectionInvalidPropertyName(Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
@@ -223,7 +248,7 @@ namespace Microsoft.Azure.Devices.E2ETests
             await deviceClient.UpdateReportedPropertiesAsync(props).ConfigureAwait(false);
 
             Twin deviceTwin = await deviceClient.GetTwinAsync().ConfigureAwait(false);
-            Assert.AreEqual<String>(deviceTwin.Properties.Reported[propName].ToString(), propValue);
+            Assert.Equal<String>(deviceTwin.Properties.Reported[propName].ToString(), propValue);
         }
 
 
@@ -239,8 +264,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                     try
                     {
-                        Assert.AreEqual(expectedPropValue, patch[expectedPropName].ToString());
-                        Assert.AreEqual(userContext, context, "Context");
+                        Assert.Equal(expectedPropValue, patch[expectedPropName].ToString());
+                        Assert.Equal(userContext, context);
                     }
                     catch (Exception e)
                     {
@@ -271,8 +296,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                     
                     try
                     {
-                        Assert.AreEqual(expectedPropValue, patch[expectedPropName].ToString());
-                        Assert.AreEqual(userContext, context, "Context");
+                        Assert.Equal(expectedPropValue, patch[expectedPropName].ToString());
+                        Assert.Equal(userContext, context);
                     }
                     catch (Exception e)
                     {
@@ -338,7 +363,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 await registryManager.UpdateTwinAsync(testDevice.Id, twinPatch, "*").ConfigureAwait(false);
 
                 var deviceTwin = await deviceClient.GetTwinAsync().ConfigureAwait(false);
-                Assert.AreEqual<string>(deviceTwin.Properties.Desired[propName].ToString(), propValue);
+                Assert.Equal<string>(deviceTwin.Properties.Desired[propName].ToString(), propValue);
 
                 await deviceClient.CloseAsync().ConfigureAwait(false);
                 await registryManager.CloseAsync().ConfigureAwait(false);
@@ -360,7 +385,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 await deviceClient.CloseAsync().ConfigureAwait(false);
 
                 var serviceTwin = await registryManager.GetTwinAsync(testDevice.Id).ConfigureAwait(false);
-                Assert.AreEqual<string>(serviceTwin.Properties.Reported[propName].ToString(), propValue);
+                Assert.Equal<string>(serviceTwin.Properties.Reported[propName].ToString(), propValue);
 
                 _log.WriteLine("verified " + serviceTwin.Properties.Reported[propName].ToString() + "=" + propValue);
             }
@@ -382,7 +407,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                     [propName1] = null
                 }).ConfigureAwait(false);
                 var serviceTwin = await registryManager.GetTwinAsync(testDevice.Id).ConfigureAwait(false);
-                Assert.IsFalse(serviceTwin.Properties.Reported.Contains(propName1));
+                Assert.False(serviceTwin.Properties.Reported.Contains(propName1));
 
                 await deviceClient.UpdateReportedPropertiesAsync(new TwinCollection
                 {
@@ -392,10 +417,10 @@ namespace Microsoft.Azure.Devices.E2ETests
                     }
                 }).ConfigureAwait(false);
                 serviceTwin = await registryManager.GetTwinAsync(testDevice.Id).ConfigureAwait(false);
-                Assert.IsTrue(serviceTwin.Properties.Reported.Contains(propName1));
+                Assert.True(serviceTwin.Properties.Reported.Contains(propName1));
                 String value1 = serviceTwin.Properties.Reported[propName1].ToString();
 
-                Assert.AreEqual(value1, propEmptyValue);
+                Assert.Equal(value1, propEmptyValue);
 
                 await deviceClient.UpdateReportedPropertiesAsync(new TwinCollection
                 {
@@ -405,9 +430,9 @@ namespace Microsoft.Azure.Devices.E2ETests
                     }
                 }).ConfigureAwait(false);
                 serviceTwin = await registryManager.GetTwinAsync(testDevice.Id).ConfigureAwait(false);
-                Assert.IsTrue(serviceTwin.Properties.Reported.Contains(propName1));
+                Assert.True(serviceTwin.Properties.Reported.Contains(propName1));
                 String value2 = serviceTwin.Properties.Reported[propName1].ToString();
-                Assert.AreEqual(value2, propEmptyValue);
+                Assert.Equal(value2, propEmptyValue);
 
                 await deviceClient.CloseAsync().ConfigureAwait(false);
             }
@@ -439,11 +464,11 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                 if (!exceptionThrown)
                 {
-                    throw new AssertFailedException("Exception was expected, but not thrown.");
+                    throw new XunitException("Exception was expected, but not thrown.");
                 }
 
                 var serviceTwin = await registryManager.GetTwinAsync(testDevice.Id).ConfigureAwait(false);
-                Assert.IsFalse(serviceTwin.Properties.Reported.Contains(propName1));
+                Assert.False(serviceTwin.Properties.Reported.Contains(propName1));
 
                 await deviceClient.CloseAsync().ConfigureAwait(false);
             }

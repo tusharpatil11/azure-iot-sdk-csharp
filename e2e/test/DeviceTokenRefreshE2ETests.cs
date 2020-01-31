@@ -3,7 +3,7 @@
 
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Client.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Azure.Devices.Common.Exceptions;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
@@ -12,11 +12,13 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
+using Xunit.Sdk;
+using DeviceNotFoundException = Microsoft.Azure.Devices.Client.Exceptions.DeviceNotFoundException;
+using UnauthorizedException = Microsoft.Azure.Devices.Client.Exceptions.UnauthorizedException;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public class DeviceTokenRefreshE2ETests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(DeviceTokenRefreshE2ETests)}_";
@@ -32,8 +34,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _log = TestLogging.GetInstance();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(DeviceNotFoundException))]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_Not_Exist_AMQP()
         {
             TestDevice testDevice = await TestDevice.GetTestDeviceAsync(DevicePrefix).ConfigureAwait(false);
@@ -41,12 +43,12 @@ namespace Microsoft.Azure.Devices.E2ETests
             var config = new Configuration.IoTHub.DeviceConnectionStringParser(testDevice.ConnectionString);
             using (DeviceClient deviceClient = DeviceClient.CreateFromConnectionString($"HostName={config.IoTHub};DeviceId=device_id_not_exist;SharedAccessKey={config.SharedAccessKey}", Client.TransportType.Amqp_Tcp_Only))
             {
-                await deviceClient.OpenAsync().ConfigureAwait(false);
+                await Assert.ThrowsAsync<DeviceNotFoundException>(() => deviceClient.OpenAsync()).ConfigureAwait(false);
             }
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UnauthorizedException))]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_Bad_Credentials_AMQP()
         {
             TestDevice testDevice = await TestDevice.GetTestDeviceAsync(DevicePrefix).ConfigureAwait(false);
@@ -55,23 +57,26 @@ namespace Microsoft.Azure.Devices.E2ETests
             string invalidKey = Convert.ToBase64String(Encoding.UTF8.GetBytes("invalid_key"));
             using (DeviceClient deviceClient = DeviceClient.CreateFromConnectionString($"HostName={config.IoTHub};DeviceId={config.DeviceID};SharedAccessKey={invalidKey}", Client.TransportType.Amqp_Tcp_Only))
             {
-                await deviceClient.OpenAsync().ConfigureAwait(false);
+                await Assert.ThrowsAsync<UnauthorizedException>(() => deviceClient.OpenAsync()).ConfigureAwait(false);
             }
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_TokenIsRefreshed_Ok_Http()
         {
             await DeviceClient_TokenIsRefreshed_Internal(Client.TransportType.Http1).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_TokenIsRefreshed_Ok_Amqp()
         {
             await DeviceClient_TokenIsRefreshed_Internal(Client.TransportType.Amqp).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_TokenIsRefreshed_Ok_Mqtt()
         {
             // The IoT Hub service allows tokens expired < 5 minutes ago to be used during CONNECT.
@@ -79,7 +84,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await DeviceClient_TokenIsRefreshed_Internal(Client.TransportType.Mqtt, IoTHubServerTimeAllowanceSeconds + 60).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_TokenConnectionDoubleRelease_Ok()
         {
             TestDevice testDevice = await TestDevice.GetTestDeviceAsync(DevicePrefix).ConfigureAwait(false);
@@ -157,7 +163,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                     }
                     catch (OperationCanceledException ex)
                     {
-                        Assert.Fail($"{TestLogging.IdOf(deviceClient)} did not get the initial token. {ex}");
+                        throw new XunitException($"{TestLogging.IdOf(deviceClient)} did not get the initial token. {ex}");
                         throw;
                     }
 
@@ -182,13 +188,12 @@ namespace Microsoft.Azure.Devices.E2ETests
                     }
                     catch (OperationCanceledException ex)
                     {
-                        Assert.Fail($"{TestLogging.IdOf(deviceClient)} did not refresh token after {refresher.DetectedRefreshInterval}. {ex}");
-                        throw;
+                        throw new XunitException($"{TestLogging.IdOf(deviceClient)} did not refresh token after {refresher.DetectedRefreshInterval}. {ex}");
                     }
 
                     // Ensure that the token was refreshed.
                     Console.WriteLine($"[{DateTime.UtcNow}] Token was refreshed after {refresher.DetectedRefreshInterval} (ttl = {ttl} seconds).");
-                    Assert.IsTrue(
+                    Assert.True(
                         refresher.DetectedRefreshInterval.TotalSeconds < (float)ttl * (1 + (float)buffer/100), // Wait for more than what we expect.
                         $"Token was refreshed after {refresher.DetectedRefreshInterval} although ttl={ttl} seconds.");
 

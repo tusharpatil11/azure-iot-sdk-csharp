@@ -2,18 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics.Tracing;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
-    [Ignore("Enable once the log analytics client can be created (needs a certificate).")]
     public class AzureSecurityCenterForIoTSecurityMessageE2ETests : IDisposable
     {
         private readonly string _devicePrefix = $"E2E_{nameof(AzureSecurityCenterForIoTSecurityMessageE2ETests)}_";
@@ -29,55 +26,64 @@ namespace Microsoft.Azure.Devices.E2ETests
             _logAnalyticsClient = AzureSecurityCenterForIoTLogAnalyticsClient.CreateClient();
         }
 
-        [TestMethod]
+        [Fact (Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_DeviceSendSingleMessage_Amqp()
         {
             return TestSecurityMessage(Client.TransportType.Amqp_Tcp_Only);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_ModuleSendSingleMessage_Amqp()
         {
             return TestSecurityMessageModule(Client.TransportType.Amqp_Tcp_Only);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_DeviceSendSingleMessage_AmqpWs()
         {
             return TestSecurityMessage(Client.TransportType.Amqp_WebSocket_Only);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_ModuleSendSingleMessage_AmqpWs()
         {
             return TestSecurityMessageModule(Client.TransportType.Amqp_WebSocket_Only);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_DeviceSendSingleMessage_Mqtt()
         {
             return TestSecurityMessage(Client.TransportType.Mqtt_Tcp_Only);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_ModuleSendSingleMessage_Mqtt()
         {
             return TestSecurityMessageModule(Client.TransportType.Mqtt_Tcp_Only);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_DeviceSendSingleMessage_MqttWs()
         {
             return TestSecurityMessage(Client.TransportType.Mqtt_WebSocket_Only);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_ModuleSendSingleMessage_MqttWs()
         {
             return TestSecurityMessageModule(Client.TransportType.Mqtt_WebSocket_Only);
         }
 
-        [TestMethod]
+        [Fact(Skip = "Enable once the log analytics client can be created (needs a certificate).")]
+        [IotHub]
         public Task SecurityMessage_DeviceSendSingleMessage_Http()
         {
             return TestSecurityMessage(Client.TransportType.Http1);
@@ -181,9 +187,9 @@ namespace Microsoft.Azure.Devices.E2ETests
             AzureSecurityCenterForIoTLogAnalyticsClient logAnalticsTestClient)
         {
             bool isReceivedEventHub = EventHubTestListener.VerifyIfMessageIsReceived(deviceId, payload, p1Value);
-            Assert.IsFalse(isReceivedEventHub, "Security message received in customer event hub.");
+            Assert.False(isReceivedEventHub, "Security message received in customer event hub.");
             bool isReceivedOms = await logAnalticsTestClient.IsRawEventExist(deviceId, eventId).ConfigureAwait(false);
-            Assert.IsTrue(isReceivedOms, "Security message was not recived in customer log analytics");
+            Assert.True(isReceivedOms, "Security message was not recived in customer log analytics");
         }
 
         public void Dispose()

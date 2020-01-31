@@ -2,11 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Xunit;
+using Xunit.Sdk;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
@@ -110,7 +111,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                         await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
                     }
 
-                    Assert.IsTrue(isFaulted, $"The device {testDevices[0].Id} did not get faulted with fault type: {faultType}");
+                    Assert.True(isFaulted);
                     s_log.WriteLine($"{nameof(FaultInjectionPoolingOverAmqp)}: Confirmed fault injection has been actived.");
 
                     // Check all devices are back online
@@ -133,7 +134,7 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                     if (notRecovered)
                     {
-                        Assert.Fail($"{testDevices[j].Id} did not reconnect.");
+                        throw new XunitException($"{testDevices[j].Id} did not reconnect.");
                     }
                     s_log.WriteLine($"{nameof(FaultInjectionPoolingOverAmqp)}: Confirmed all devices back online.");
 
@@ -176,16 +177,16 @@ namespace Microsoft.Azure.Devices.E2ETests
                         if (FaultInjection.FaultShouldDisconnect(faultType))
                         {
                             // 4 is the minimum notification count: connect, fault, reconnect, disable.
-                            Assert.IsTrue(amqpConnectionStatuses[i].ConnectionStatusChangeCount >= 4, $"The expected connection status change count for {testDevices[i].Id} should equals or greater than 4 but was {amqpConnectionStatuses[i].ConnectionStatusChangeCount}");
+                            Assert.True(amqpConnectionStatuses[i].ConnectionStatusChangeCount >= 4, $"The expected connection status change count for {testDevices[i].Id} should equals or greater than 4 but was {amqpConnectionStatuses[i].ConnectionStatusChangeCount}");
                         }
                         else
                         {
                             // 2 is the minimum notification count: connect, disable.
-                            Assert.IsTrue(amqpConnectionStatuses[i].ConnectionStatusChangeCount == 2, $"The expected connection status change count for {testDevices[i].Id}  should be 2 but was {amqpConnectionStatuses[i].ConnectionStatusChangeCount}");
+                            Assert.True(amqpConnectionStatuses[i].ConnectionStatusChangeCount == 2, $"The expected connection status change count for {testDevices[i].Id}  should be 2 but was {amqpConnectionStatuses[i].ConnectionStatusChangeCount}");
                         }
                     }
-                    Assert.AreEqual(ConnectionStatus.Disabled, amqpConnectionStatuses[i].LastConnectionStatus, $"The expected connection status should be {ConnectionStatus.Disabled} but was {amqpConnectionStatuses[i].LastConnectionStatus}");
-                    Assert.AreEqual(ConnectionStatusChangeReason.Client_Close, amqpConnectionStatuses[i].LastConnectionStatusChangeReason, $"The expected connection status change reason should be {ConnectionStatusChangeReason.Client_Close} but was {amqpConnectionStatuses[i].LastConnectionStatusChangeReason}");
+                    Assert.Equal(ConnectionStatus.Disabled, amqpConnectionStatuses[i].LastConnectionStatus);
+                    Assert.Equal(ConnectionStatusChangeReason.Client_Close, amqpConnectionStatuses[i].LastConnectionStatusChangeReason);
                 }
             }
             finally

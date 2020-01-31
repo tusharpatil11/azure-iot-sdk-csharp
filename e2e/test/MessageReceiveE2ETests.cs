@@ -2,21 +2,18 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure.Devices.Client.Exceptions;
 using System.Threading;
+using Xunit;
+using Xunit.Sdk;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public partial class MessageReceiveE2ETests : IDisposable
     {
         private static readonly string DevicePrefix = $"E2E_{nameof(MessageReceiveE2ETests)}_";
@@ -33,193 +30,225 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessage_Amqp()
         {
             await ReceiveSingleMessage(TestDeviceType.Sasl, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessage_AmqpWs()
         {
             await ReceiveSingleMessage(TestDeviceType.Sasl, Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessage_Mqtt()
         {
             await ReceiveSingleMessage(TestDeviceType.Sasl, Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessage_MqttWs()
         {
             await ReceiveSingleMessage(TestDeviceType.Sasl, Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessage_Http()
         {
             await ReceiveSingleMessage(TestDeviceType.Sasl, Client.TransportType.Http1).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessage_Amqp()
         {
             await ReceiveSingleMessage(TestDeviceType.X509, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessage_AmqpWs()
         {
             await ReceiveSingleMessage(TestDeviceType.X509, Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessage_Mqtt()
         {
             await ReceiveSingleMessage(TestDeviceType.X509, Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessage_MqttWs()
         {
             await ReceiveSingleMessage(TestDeviceType.X509, Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessage_Http()
         {
             await ReceiveSingleMessage(TestDeviceType.X509, Client.TransportType.Http1).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessageWithCancellationToken_Amqp()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.Sasl, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessageWithCancellationToken_AmqpWs()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.Sasl, Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessageWithCancellationToken_Mqtt()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.Sasl, Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessageWithCancellationToken_MqttWs()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.Sasl, Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveSingleMessageWithCancellationToken_Http()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.Sasl, Client.TransportType.Http1).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessageWithCancellationToken_Amqp()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.X509, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessageWithCancellationToken_AmqpWs()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.X509, Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessageWithCancellationToken_Mqtt()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.X509, Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessageWithCancellationToken_MqttWs()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.X509, Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceReceiveSingleMessageWithCancellationToken_Http()
         {
             await ReceiveSingleMessageWithCancellationToken(TestDeviceType.X509, Client.TransportType.Http1).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageWithLessTimeout_Amqp()
         {
             await ReceiveMessageWithTimeout(TestDeviceType.Sasl, Client.TransportType.Amqp_Tcp_Only, TIMESPAN_ONE_SECOND).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageWithMoreTimeout_Amqp()
         {
             await ReceiveMessageWithTimeout(TestDeviceType.Sasl, Client.TransportType.Amqp_Tcp_Only, TIMESPAN_TWENDY_SECONDS).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageWithLessTimeout_AmqpWs()
         {
             await ReceiveMessageWithTimeout(TestDeviceType.Sasl, Client.TransportType.Amqp_WebSocket_Only, TIMESPAN_ONE_SECOND).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageWithMoreTimeout_AmqpWs()
         {
             await ReceiveMessageWithTimeout(TestDeviceType.Sasl, Client.TransportType.Amqp_WebSocket_Only, TIMESPAN_TWENDY_SECONDS).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageWithLessTimeout_Mqtt()
         {
             await ReceiveMessageWithTimeout(TestDeviceType.Sasl, Client.TransportType.Mqtt_Tcp_Only, TIMESPAN_ONE_SECOND).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageWithMoreTimeout_Mqtt()
         {
             await ReceiveMessageWithTimeout(TestDeviceType.Sasl, Client.TransportType.Mqtt_Tcp_Only, TIMESPAN_TWENDY_SECONDS).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageWithLessTimeout_MqttWs()
         {
             await ReceiveMessageWithTimeout(TestDeviceType.Sasl, Client.TransportType.Mqtt_WebSocket_Only, TIMESPAN_ONE_SECOND).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageWithMoreTimeout_MqttWs()
         {
             await ReceiveMessageWithTimeout(TestDeviceType.Sasl, Client.TransportType.Mqtt_WebSocket_Only, TIMESPAN_TWENDY_SECONDS).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageOperationTimeout_Amqp()
         {
             await ReceiveMessageInOperationTimeout(TestDeviceType.Sasl, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageOperationTimeout_AmqpWs()
         {
             await ReceiveMessageInOperationTimeout(TestDeviceType.Sasl, Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageOperationTimeout_Mqtt()
         {
             await ReceiveMessageInOperationTimeout(TestDeviceType.Sasl, Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceReceiveMessageOperationTimeout_MqttWs()
         {
             await ReceiveMessageInOperationTimeout(TestDeviceType.Sasl, Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
@@ -266,7 +295,7 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                 if (receivedMessage == null)
                 {
-                    Assert.Fail($"No message is received for device {deviceId} in {TIMESPAN_ONE_MINUTE}.");
+                    throw new XunitException($"No message is received for device {deviceId} in {TIMESPAN_ONE_MINUTE}.");
                 }
 
                 try
@@ -283,16 +312,16 @@ namespace Microsoft.Azure.Devices.E2ETests
                 _log.WriteLine($"{nameof(VerifyReceivedC2DMessageAsync)}: Received message: for {deviceId}: {messageData}");
                 if (Equals(payload, messageData))
                 {
-                    Assert.AreEqual(1, receivedMessage.Properties.Count, $"The count of received properties did not match for device {deviceId}");
+                    Assert.Equal(1, receivedMessage.Properties.Count);
                     var prop = receivedMessage.Properties.Single();
-                    Assert.AreEqual("property1", prop.Key, $"The key \"property1\" did not match for device {deviceId}");
-                    Assert.AreEqual(p1Value, prop.Value, $"The value of \"property1\" did not match for device {deviceId}");
+                    Assert.Equal("property1", prop.Key);
+                    Assert.Equal(p1Value, prop.Value);
                     received = true;
                 }
             }
 
             sw.Stop();
-            Assert.IsTrue(received, $"No message received for device {deviceId} with payload={payload} in {FaultInjection.RecoveryTimeMilliseconds}.");
+            Assert.True(received, $"No message received for device {deviceId} with payload={payload} in {FaultInjection.RecoveryTimeMilliseconds}.");
         }
 
         public static async Task VerifyReceivedC2DMessageWithCancellationTokenAsync(Client.TransportType transport, DeviceClient dc, string deviceId, string payload, string p1Value)
@@ -313,7 +342,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 
                 if (receivedMessage == null)
                 {
-                    Assert.Fail($"No message is received for device {deviceId} in {TIMESPAN_ONE_MINUTE}.");
+                    throw new XunitException($"No message is received for device {deviceId} in {TIMESPAN_ONE_MINUTE}.");
                 }
 
                 try
@@ -330,16 +359,16 @@ namespace Microsoft.Azure.Devices.E2ETests
                 _log.WriteLine($"{nameof(VerifyReceivedC2DMessageAsync)}: Received message: for {deviceId}: {messageData}");
                 if (Equals(payload, messageData))
                 {
-                    Assert.AreEqual(1, receivedMessage.Properties.Count, $"The count of received properties did not match for device {deviceId}");
+                    Assert.Equal(1, receivedMessage.Properties.Count);
                     var prop = receivedMessage.Properties.Single();
-                    Assert.AreEqual("property1", prop.Key, $"The key \"property1\" did not match for device {deviceId}");
-                    Assert.AreEqual(p1Value, prop.Value, $"The value of \"property1\" did not match for device {deviceId}");
+                    Assert.Equal("property1", prop.Key);
+                    Assert.Equal(p1Value, prop.Value);
                     received = true;
                 }
             }
 
             sw.Stop();
-            Assert.IsTrue(received, $"No message received for device {deviceId} with payload={payload} in {FaultInjection.RecoveryTimeMilliseconds}.");
+            Assert.True(received, $"No message received for device {deviceId} with payload={payload} in {FaultInjection.RecoveryTimeMilliseconds}.");
         }
 
         private async Task ReceiveMessageInOperationTimeout(TestDeviceType type, Client.TransportType transport)
@@ -484,7 +513,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                     TimeSpan maxLatency = TimeSpan.FromMilliseconds(dc.OperationTimeoutInMilliseconds) + bufferTime;
                     if (sw.Elapsed > maxLatency)
                     {
-                        Assert.Fail($"ReceiveAsync did not return in {maxLatency}, instead it took {sw.Elapsed}.");
+                        throw new XunitException($"ReceiveAsync did not return in {maxLatency}, instead it took {sw.Elapsed}.");
                     }
                 }
             }
@@ -506,13 +535,14 @@ namespace Microsoft.Azure.Devices.E2ETests
                         break;
                     }
                    
+
                     await dc.CompleteAsync(message).ConfigureAwait(false);
                 }
                 finally
                 {
                     if (sw.Elapsed > (timeout + TIMESPAN_FIVE_SECONDS))
                     {
-                        Assert.Fail("ReceiveAsync did not return in Operation Timeout time.");
+                        throw new XunitException("ReceiveAsync did not return in Operation Timeout time.");
                     }
                 }
             }

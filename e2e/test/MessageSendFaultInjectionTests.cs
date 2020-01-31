@@ -3,17 +3,14 @@
 
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Client.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.Tracing;
-using System.Text;
 using System.Threading.Tasks;
+using Xunit;
+using Xunit.Sdk;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
-    [TestCategory("IoTHub-FaultInjection")]
     public partial class MessageSendFaultInjectionTests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(MessageSendFaultInjectionTests)}_";
@@ -28,7 +25,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_TcpConnectionLossSendRecovery_Amqp()
         {
             await SendMessageRecovery(
@@ -39,7 +37,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_TcpConnectionLossSendRecovery_AmqpWs()
         {
             await SendMessageRecovery(
@@ -50,7 +49,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_TcpConnectionLossSendRecovery_Mqtt()
         {
             await SendMessageRecovery(
@@ -61,7 +61,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_TcpConnectionLossSendRecovery_MqttWs()
         {
             await SendMessageRecovery(
@@ -72,7 +73,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpConnectionLossSendRecovery_Amqp()
         {
             await SendMessageRecovery(
@@ -83,7 +85,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpConnectionLossSendRecovery_AmqpWs()
         {
             await SendMessageRecovery(
@@ -94,7 +97,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpSessionLossSendRecovery_Amqp()
         {
             await SendMessageRecovery(
@@ -105,7 +109,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpSessionLossSendRecovery_AmqpWs()
         {
             await SendMessageRecovery(
@@ -116,7 +121,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpD2CLinkDropSendRecovery_Amqp()
         {
             await SendMessageRecovery(
@@ -127,7 +133,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_AmqpD2CLinkDropSendRecovery_AmqpWs()
         {
             await SendMessageRecovery(
@@ -138,7 +145,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
         
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_ThrottledConnectionRecovery_Amqp()
         {
             await SendMessageRecovery(
@@ -150,7 +158,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                     FaultInjection.DefaultDurationInSec).ConfigureAwait(false);
         }
         
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_ThrottledConnectionRecovery_AmqpWs()
         {
             await SendMessageRecovery(
@@ -162,7 +171,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                     FaultInjection.DefaultDurationInSec).ConfigureAwait(false);
         }
         
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_ThrottledConnectionLongTimeNoRecovery_Amqp()
         {
             try
@@ -176,17 +186,18 @@ namespace Microsoft.Azure.Devices.E2ETests
                     FaultInjection.DefaultDurationInSec,
                     FaultInjection.ShortRetryInMilliSec).ConfigureAwait(false);
 
-                Assert.Fail("None of the expected exceptions were thrown.");
+                throw new XunitException("None of the expected exceptions were thrown");
             }
             catch (IotHubThrottledException) { }
             catch (IotHubCommunicationException ex)
             {
-                Assert.IsInstanceOfType(ex.InnerException, typeof(OperationCanceledException));
+                Assert.True(ex.InnerException.GetType().IsInstanceOfType(typeof(OperationCanceledException)));
             }
             catch (TimeoutException) { }
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_ThrottledConnectionLongTimeNoRecovery_AmqpWs()
         {
             try
@@ -199,17 +210,18 @@ namespace Microsoft.Azure.Devices.E2ETests
                     FaultInjection.DefaultDelayInSec,
                     FaultInjection.DefaultDurationInSec,
                     FaultInjection.ShortRetryInMilliSec).ConfigureAwait(false);
-                Assert.Fail("None of the expected exceptions were thrown.");
+                throw new XunitException("None of the expected exceptions were thrown.");
             }
             catch (IotHubThrottledException) { }
             catch (IotHubCommunicationException ex)
             {
-                Assert.IsInstanceOfType(ex.InnerException, typeof(OperationCanceledException));
+                Assert.True(ex.InnerException.GetType().IsInstanceOfType(typeof(OperationCanceledException)));
             }
             catch (TimeoutException) { }
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_ThrottledConnectionLongTimeNoRecovery_Http()
         {
             try
@@ -223,43 +235,44 @@ namespace Microsoft.Azure.Devices.E2ETests
                     FaultInjection.DefaultDurationInSec,
                     FaultInjection.ShortRetryInMilliSec).ConfigureAwait(false);
 
-                Assert.Fail("None of the expected exceptions were thrown.");
+                throw new XunitException("None of the expected exceptions were thrown.");
             }
             catch (IotHubThrottledException) { }
             catch (IotHubCommunicationException ex)
             {
-                Assert.IsInstanceOfType(ex.InnerException, typeof(OperationCanceledException));
+                Assert.True(ex.InnerException.GetType().IsInstanceOfType(typeof(OperationCanceledException)));
             }
             catch (TimeoutException) { }
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(DeviceMaximumQueueDepthExceededException))]
+        [Fact]
+        [IotHub]
         public async Task Message_QuotaExceededRecovery_Amqp()
         {
-            await SendMessageRecovery(
+            await Assert.ThrowsAsync<DeviceMaximumQueueDepthExceededException>(() => SendMessageRecovery(
                 TestDeviceType.Sasl,
                 Client.TransportType.Amqp_Tcp_Only,
                 FaultInjection.FaultType_QuotaExceeded,
                 FaultInjection.FaultCloseReason_Boom,
                 FaultInjection.DefaultDelayInSec,
-                FaultInjection.DefaultDurationInSec).ConfigureAwait(false);
+                FaultInjection.DefaultDurationInSec)).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(DeviceMaximumQueueDepthExceededException))]
+        [Fact]
+        [IotHub]
         public async Task Message_QuotaExceededRecovery_AmqpWs()
         {
-            await SendMessageRecovery(
+            await Assert.ThrowsAsync<DeviceMaximumQueueDepthExceededException>(() => SendMessageRecovery(
                 TestDeviceType.Sasl,
                 Client.TransportType.Amqp_WebSocket_Only,
                 FaultInjection.FaultType_QuotaExceeded,
                 FaultInjection.FaultCloseReason_Boom,
                 FaultInjection.DefaultDelayInSec,
-                FaultInjection.DefaultDurationInSec).ConfigureAwait(false);
+                FaultInjection.DefaultDurationInSec)).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_QuotaExceededRecovery_Http()
         {
             try
@@ -273,57 +286,58 @@ namespace Microsoft.Azure.Devices.E2ETests
                     FaultInjection.DefaultDurationInSec,
                     FaultInjection.ShortRetryInMilliSec).ConfigureAwait(false);
 
-                Assert.Fail("None of the expected exceptions were thrown.");
+                throw new XunitException("None of the expected exceptions were thrown.");
             }
             catch (QuotaExceededException) { }
             catch (IotHubCommunicationException ex)
             {
-                Assert.IsInstanceOfType(ex.InnerException, typeof(OperationCanceledException));
+                Assert.True(ex.InnerException.GetType().IsInstanceOfType(typeof(OperationCanceledException)));
             }
             catch (TimeoutException) { }
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UnauthorizedException))]
+        [Fact]
+        [IotHub]
         public async Task Message_AuthenticationRecovery_Amqp()
         {
-            await SendMessageRecovery(
+            await Assert.ThrowsAsync<UnauthorizedException>(() => SendMessageRecovery(
                 TestDeviceType.Sasl,
                 Client.TransportType.Amqp_Tcp_Only,
                 FaultInjection.FaultType_Auth,
                 FaultInjection.FaultCloseReason_Boom,
                 FaultInjection.DefaultDelayInSec,
-                FaultInjection.DefaultDurationInSec).ConfigureAwait(false);
+                FaultInjection.DefaultDurationInSec)).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UnauthorizedException))]
+        [Fact]
+        [IotHub]
         public async Task Message_AuthenticationRecovery_AmqpWs()
         {
-            await SendMessageRecovery(
+            await Assert.ThrowsAsync<UnauthorizedException>(() => SendMessageRecovery(
                 TestDeviceType.Sasl,
                 Client.TransportType.Amqp_WebSocket_Only,
                 FaultInjection.FaultType_Auth,
                 FaultInjection.FaultCloseReason_Boom,
                 FaultInjection.DefaultDelayInSec,
-                FaultInjection.DefaultDurationInSec).ConfigureAwait(false);
+                FaultInjection.DefaultDurationInSec)).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UnauthorizedException))]
+        [Fact]
+        [IotHub]
         public async Task Message_AuthenticationWontRecover_Http()
         {
-            await SendMessageRecovery(
+            await Assert.ThrowsAsync<UnauthorizedException>(() => SendMessageRecovery(
                 TestDeviceType.Sasl,
                 Client.TransportType.Http1,
                 FaultInjection.FaultType_Auth,
                 FaultInjection.FaultCloseReason_Boom,
                 FaultInjection.DefaultDelayInSec,
                 FaultInjection.DefaultDurationInSec,
-                FaultInjection.RecoveryTimeMilliseconds).ConfigureAwait(false);
+                FaultInjection.RecoveryTimeMilliseconds)).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_GracefulShutdownSendRecovery_Amqp()
         {
             await SendMessageRecovery(
@@ -334,7 +348,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_GracefulShutdownSendRecovery_AmqpWs()
         {
             await SendMessageRecovery(
@@ -345,7 +360,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_GracefulShutdownSendRecovery_Mqtt()
         {
             await SendMessageRecovery(
@@ -356,7 +372,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_GracefulShutdownSendRecovery_MqttWs()
         {
             await SendMessageRecovery(
@@ -388,7 +405,7 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                 bool isReceived = false;
                 isReceived = EventHubTestListener.VerifyIfMessageIsReceived(testDevice.Id, payload, p1Value);
-                Assert.IsTrue(isReceived);
+                Assert.True(isReceived);
             };
 
             await FaultInjection.TestErrorInjectionAsync(

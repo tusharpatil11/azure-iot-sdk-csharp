@@ -3,17 +3,15 @@
 
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public class TwinFaultInjectionTests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(TwinFaultInjectionTests)}_";
@@ -26,8 +24,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceReportedPropertiesTcpConnRecovery_Mqtt()
         {
             await Twin_DeviceReportedPropertiesRecovery(
@@ -37,8 +35,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceReportedPropertiesTcpConnRecovery_MqttWs()
         {
             await Twin_DeviceReportedPropertiesRecovery(
@@ -48,8 +46,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceReportedPropertiesTcpConnRecovery_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecovery(
@@ -59,8 +57,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceReportedPropertiesTcpConnRecovery_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecovery(
@@ -70,8 +68,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceReportedPropertiesGracefulShutdownRecovery_Mqtt()
         {
             await Twin_DeviceReportedPropertiesRecovery(
@@ -81,8 +79,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceReportedPropertiesGracefulShutdownRecovery_MqttWs()
         {
             await Twin_DeviceReportedPropertiesRecovery(
@@ -92,8 +90,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceReportedPropertiesGracefulShutdownRecovery_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecovery(
@@ -103,8 +101,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceReportedPropertiesGracefulShutdownRecovery_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecovery(
@@ -114,8 +112,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceDesiredPropertyUpdateTcpConnRecovery_Mqtt()
         {
             await Twin_DeviceDesiredPropertyUpdateRecovery(
@@ -125,8 +123,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceDesiredPropertyUpdateTcpConnRecovery_MqttWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecovery(
@@ -136,8 +134,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceDesiredPropertyUpdateTcpConnRecovery_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecovery(
@@ -147,8 +145,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceDesiredPropertyUpdateTcpConnRecovery_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecovery(
@@ -158,8 +156,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_Mqtt()
         {
             await Twin_DeviceDesiredPropertyUpdateRecovery(
@@ -169,8 +167,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_MqttWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecovery(
@@ -180,8 +178,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecovery(
@@ -191,8 +189,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.DefaultDelayInSec).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("IoTHub-FaultInjection")]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecovery(
@@ -216,11 +214,11 @@ namespace Microsoft.Azure.Devices.E2ETests
                 await deviceClient.UpdateReportedPropertiesAsync(props).ConfigureAwait(false);
 
                 Twin deviceTwin = await deviceClient.GetTwinAsync().ConfigureAwait(false);
-                Assert.IsNotNull(deviceTwin, $"{nameof(deviceTwin)} is null");
-                Assert.IsNotNull(deviceTwin.Properties, $"{nameof(deviceTwin)}.Properties is null");
-                Assert.IsNotNull(deviceTwin.Properties.Reported, $"{nameof(deviceTwin)}.Properties.Reported is null");
-                Assert.IsNotNull(deviceTwin.Properties.Reported[propName], $"{nameof(deviceTwin)}.Properties.Reported[{nameof(propName)}] is null");
-                Assert.AreEqual<String>(deviceTwin.Properties.Reported[propName].ToString(), propValue);
+                Assert.NotNull(deviceTwin);
+                Assert.NotNull(deviceTwin.Properties);
+                Assert.NotNull(deviceTwin.Properties.Reported);
+                Assert.NotNull(deviceTwin.Properties.Reported[propName]);
+                Assert.Equal(propValue, deviceTwin.Properties.Reported[propName].ToString());
             };
 
             await FaultInjection

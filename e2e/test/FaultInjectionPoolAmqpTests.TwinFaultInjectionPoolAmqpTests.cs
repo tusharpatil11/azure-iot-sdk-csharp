@@ -2,12 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
@@ -15,9 +14,8 @@ namespace Microsoft.Azure.Devices.E2ETests
     {
         private readonly string Twin_DevicePrefix = $"E2E_TwinFaultInjectionPoolAmqpTests";
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTcpConnRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -29,9 +27,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Boom).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTcpConnRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -43,9 +40,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Boom).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesGracefulShutdownRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -57,9 +53,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Bye).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesGracefulShutdownRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -71,9 +66,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Bye).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesAmqpConnectionLossRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -85,9 +79,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 "").ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesAmqpConnectionLossRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -101,8 +94,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesAmqpSessionLossRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -116,8 +109,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesAmqpSessionLossRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -131,8 +124,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTwinReqLinkDropRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -146,8 +139,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTwinReqLinkDropRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -161,8 +154,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTwinRespLinkDropRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -176,8 +169,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTwinRespLinkDropRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -190,8 +183,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTcpConnRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -205,8 +198,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTcpConnRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -220,8 +213,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesGracefulShutdownRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -235,8 +228,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesGracefulShutdownRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -250,8 +243,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesAmqpConnectionLossRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -265,8 +258,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesAmqpConnectionLossRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -281,8 +274,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesAmqpSessionLossRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -297,8 +290,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesAmqpSessionLossRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -313,8 +306,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTwinReqLinkDropRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -329,8 +322,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTwinReqLinkDropRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -345,8 +338,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTwinRespLinkDropRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -361,8 +354,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTwinRespLinkDropRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -375,7 +368,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTcpConnRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -387,7 +381,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Boom).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTcpConnRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -399,7 +394,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Boom).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesGracefulShutdownRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -411,7 +407,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Bye).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesGracefulShutdownRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -423,7 +420,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Bye).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesAmqpConnectionLossRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -435,7 +433,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 "").ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesAmqpConnectionLossRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -447,9 +446,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 "").ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesAmqpSessionLossRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -461,9 +459,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 "").ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesAmqpSessionLossRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -475,9 +472,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 "").ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTwinReqLinkDropRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -489,9 +485,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Boom).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTwinReqLinkDropRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -503,9 +498,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Boom).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTwinRespLinkDropRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -517,9 +511,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Boom).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceReportedPropertiesTwinRespLinkDropRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -531,7 +524,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 FaultInjection.FaultCloseReason_Boom).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTcpConnRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -544,7 +538,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTcpConnRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -557,7 +552,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesGracefulShutdownRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -570,7 +566,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesGracefulShutdownRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -583,7 +580,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesAmqpConnectionLossRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -596,7 +594,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesAmqpConnectionLossRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -609,9 +608,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesAmqpSessionLossRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -624,9 +622,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesAmqpSessionLossRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -639,9 +636,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTwinReqLinkDropRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -654,9 +650,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTwinReqLinkDropRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -669,9 +664,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTwinRespLinkDropRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -684,9 +678,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceReportedPropertiesTwinRespLinkDropRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceReportedPropertiesRecoveryPoolOverAmqp(
@@ -699,9 +692,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTcpConnRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -714,9 +706,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTcpConnRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -729,9 +720,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -744,9 +734,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -759,9 +748,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateAmqpConnectionLossRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -774,9 +762,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateAmqpConnectionLossRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -791,8 +778,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateAmqpSessionLossRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -807,8 +794,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateAmqpSessionLossRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -823,8 +810,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTwinReqLinkDropRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -839,8 +826,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTwinReqLinkDropRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -855,8 +842,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTwinRespLinkDropRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -871,8 +858,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTwinRespLinkDropRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -885,9 +872,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTcpConnRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -901,9 +887,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTcpConnRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -917,9 +902,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -933,9 +917,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -949,9 +932,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateAmqpConnectionLossRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -965,9 +947,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateAmqpConnectionLossRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -983,8 +964,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateAmqpSessionLossRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1000,8 +981,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateAmqpSessionLossRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1017,8 +998,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTwinReqLinkDropRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1034,8 +1015,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTwinReqLinkDropRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1051,8 +1032,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTwinRespLinkDropRecovery_SingleConnection_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1068,8 +1049,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         // TODO: #943 - Honor different pool sizes for different connection pool settings.
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTwinRespLinkDropRecovery_SingleConnection_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1083,7 +1064,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTcpConnRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1096,7 +1078,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTcpConnRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1109,7 +1092,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1122,7 +1106,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1135,7 +1120,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateAmqpConnectionLossRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1148,7 +1134,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateAmqpConnectionLossRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1162,7 +1149,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateAmqpSessionLossRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1176,7 +1164,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateAmqpSessionLossRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1190,7 +1179,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTwinReqLinkDropRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1204,7 +1194,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTwinReqLinkDropRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1218,7 +1209,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTwinRespLinkDropRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1232,7 +1224,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_DeviceSak_DeviceDesiredPropertyUpdateTwinRespLinkDropRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1245,7 +1238,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 TwinE2ETests.SetTwinPropertyUpdateCallbackHandlerAsync).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTcpConnRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1259,7 +1253,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTcpConnRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1273,7 +1268,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1287,7 +1283,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateGracefulShutdownRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1301,7 +1298,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateAmqpConnectionLossRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1315,7 +1313,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 authScope: ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateAmqpConnectionLossRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1330,7 +1329,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateAmqpSessionLossRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1345,7 +1345,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateAmqpSessionLossRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1360,7 +1361,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTwinReqLinkDropRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1375,7 +1377,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTwinReqLinkDropRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1390,7 +1393,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTwinRespLinkDropRecovery_MultipleConnections_Amqp()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1405,7 +1409,8 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         // TODO: #950 - Link/session faults for message send/ method/ twin operations closes the connection.
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Twin_IoTHubSak_DeviceDesiredPropertyUpdateTwinRespLinkDropRecovery_MultipleConnections_AmqpWs()
         {
             await Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp(
@@ -1432,7 +1437,7 @@ namespace Microsoft.Azure.Devices.E2ETests
         {
             Func<DeviceClient, TestDevice, Task> testOperation = async (deviceClient, testDevice) =>
             {
-                _log.WriteLine($"{nameof(TwinE2EPoolAmqpTests)}: Setting reported propery and verifying twin for device {testDevice.Id}");
+                _log.WriteLine($"{nameof(TwinE2EPoolAmqpTests)}: Setting reported property and verifying twin for device {testDevice.Id}");
                 await TwinE2ETests.Twin_DeviceSetsReportedPropertyAndGetsItBack(deviceClient).ConfigureAwait(false);
             };
 
@@ -1484,7 +1489,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 var propValue = Guid.NewGuid().ToString();
                 twinPropertyMap.Add(testDevice.Id, new List<string> { propName, propValue });
 
-                _log.WriteLine($"{nameof(FaultInjectionPoolAmqpTests)}: Setting desired propery callback for device {testDevice.Id}");
+                _log.WriteLine($"{nameof(FaultInjectionPoolAmqpTests)}: Setting desired property callback for device {testDevice.Id}");
                 _log.WriteLine($"{nameof(Twin_DeviceDesiredPropertyUpdateRecoveryPoolOverAmqp)}: name={propName}, value={propValue}");
                 await testDeviceCallbackHandler.SetTwinPropertyUpdateCallbackHandlerAsync(propName).ConfigureAwait(false);
             };

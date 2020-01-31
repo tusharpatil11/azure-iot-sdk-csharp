@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
@@ -99,8 +99,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                         }
 
                         // The connection status should be "Disabled", with connection status change reason "Client_close"
-                        Assert.AreEqual(ConnectionStatus.Disabled, amqpConnectionStatuses[i].LastConnectionStatus, $"The actual connection status is = {amqpConnectionStatuses[i].LastConnectionStatus}");
-                        Assert.AreEqual(ConnectionStatusChangeReason.Client_Close, amqpConnectionStatuses[i].LastConnectionStatusChangeReason, $"The actual connection status change reason is = {amqpConnectionStatuses[i].LastConnectionStatusChangeReason}");
+                        Assert.Equal(ConnectionStatus.Disabled, amqpConnectionStatuses[i].LastConnectionStatus);
+                        Assert.Equal(ConnectionStatusChangeReason.Client_Close, amqpConnectionStatuses[i].LastConnectionStatusChangeReason);
                     }
                     if (deviceConnectionStatusAsExpected) successfulRuns++;
                     currentSuccessRate = (int)((double)successfulRuns / totalRuns * 100);
@@ -118,7 +118,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 }
             } while (reRunTest && totalRuns < maxTestRunCount);
 
-            Assert.IsFalse(reRunTest, $"Device client instances got disconnected in {totalRuns - successfulRuns} runs out of {totalRuns}; current testSuccessRate = {currentSuccessRate}%.");
+            Assert.False(reRunTest, $"Device client instances got disconnected in {totalRuns - successfulRuns} runs out of {totalRuns}; current testSuccessRate = {currentSuccessRate}%.");
         }
 
         private class AmqpConnectionStatusChange

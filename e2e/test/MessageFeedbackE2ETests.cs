@@ -1,16 +1,15 @@
 ﻿using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
+using Xunit.Sdk;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     // TODO MQTT OrderedTwoPhaseWorkQueue disallow message feedback to be called mix order, enable this test once it's fixed
     public class MessageFeedbackE2ETests
     {
@@ -28,7 +27,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_CompleteMixOrder_AMQP()
         {
             await CompleteMessageMixOrder(TestDeviceType.Sasl, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
@@ -59,7 +59,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                     Client.Message message = await deviceClient.ReceiveAsync(TIMESPAN_ONE_MINUTE).ConfigureAwait(false);
                     if (message == null)
                     {
-                        Assert.Fail("No message received.");
+                        throw new XunitException("No message received.");
                     }
                     messages.Add(message);
                 }
@@ -70,7 +70,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                     stopwatch.Start();
                     await deviceClient.CompleteAsync(messages[MESSAGE_COUNT - 1 - i]).ConfigureAwait(false);
                     stopwatch.Stop();
-                    Assert.IsFalse(stopwatch.ElapsedMilliseconds > deviceClient.OperationTimeoutInMilliseconds, $"CompleteAsync is over {deviceClient.OperationTimeoutInMilliseconds}");
+                    Assert.False(stopwatch.ElapsedMilliseconds > deviceClient.OperationTimeoutInMilliseconds, $"CompleteAsync is over {deviceClient.OperationTimeoutInMilliseconds}");
                 }
 
                 await deviceClient.CloseAsync().ConfigureAwait(false);

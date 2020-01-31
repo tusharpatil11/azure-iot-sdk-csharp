@@ -2,12 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
@@ -50,8 +50,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                     try
                     {
                         s_log.WriteLine($"{nameof(SetDeviceReceiveMethodAsync)}: DeviceClient callback method: {request.Name} {request.ResponseTimeout}.");
-                        Assert.AreEqual(methodName, request.Name, $"The expected method name should be {methodName} but was {request.Name}");
-                        Assert.AreEqual(expectedServiceRequestJson, request.DataAsJson, $"The expected method name should be {expectedServiceRequestJson} but was {request.DataAsJson}");
+                        Assert.Equal(methodName, request.Name);
+                        Assert.Equal(expectedServiceRequestJson, request.DataAsJson);
 
                         return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(deviceResponseJson), 200));
                     }
@@ -88,8 +88,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                     try
                     {
-                        Assert.AreEqual(ExpectedTwinPropertyValue, patch[expectedPropName].ToString());
-                        Assert.AreEqual(userContext, context, "Context");
+                        Assert.Equal(ExpectedTwinPropertyValue, patch[expectedPropName].ToString());
+                        Assert.Equal(userContext, context);
                     }
                     catch (Exception ex)
                     {

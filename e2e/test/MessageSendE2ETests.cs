@@ -3,18 +3,16 @@
 
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Client.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public partial class MessageSendE2ETests : IDisposable
     {
         private const int MESSAGE_BATCH_COUNT = 5;
@@ -30,37 +28,43 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_Amqp()
         {
             await SendSingleMessage(TestDeviceType.Sasl, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_AmqpWs()
         {
             await SendSingleMessage(TestDeviceType.Sasl, Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_Mqtt()
         {
             await SendSingleMessage(TestDeviceType.Sasl, Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_MqttWs()
         {
             await SendSingleMessage(TestDeviceType.Sasl, Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_Http()
         {
             await SendSingleMessage(TestDeviceType.Sasl, Client.TransportType.Http1).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_Amqp_WithHeartbeats()
         {
             Client.AmqpTransportSettings amqpTransportSettings = new Client.AmqpTransportSettings(Client.TransportType.Amqp_Tcp_Only);
@@ -69,7 +73,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendSingleMessage(TestDeviceType.Sasl, transportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_AmqpWs_WithHeartbeats()
         {
             Client.AmqpTransportSettings amqpTransportSettings = new Client.AmqpTransportSettings(Client.TransportType.Amqp_WebSocket_Only);
@@ -79,8 +84,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendSingleMessage(TestDeviceType.Sasl, transportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_Http_WithProxy()
         {
             Client.Http1TransportSettings httpTransportSettings = new Client.Http1TransportSettings();
@@ -90,8 +95,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendSingleMessage(TestDeviceType.Sasl, transportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_Http_WithCustomeProxy()
         {
             Http1TransportSettings httpTransportSettings = new Http1TransportSettings();
@@ -100,11 +105,11 @@ namespace Microsoft.Azure.Devices.E2ETests
             ITransportSettings[] transportSettings = new ITransportSettings[] { httpTransportSettings };
 
             await SendSingleMessage(TestDeviceType.Sasl, transportSettings).ConfigureAwait(false);
-            Assert.AreNotEqual(proxy.Counter, 0);
+            Assert.NotEqual(0, proxy.Counter);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_AmqpWs_WithProxy()
         {
             Client.AmqpTransportSettings amqpTransportSettings = new Client.AmqpTransportSettings(Client.TransportType.Amqp_WebSocket_Only);
@@ -114,8 +119,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendSingleMessage(TestDeviceType.Sasl, transportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSendSingleMessage_MqttWs_WithProxy()
         {
             Client.Transport.Mqtt.MqttTransportSettings mqttTransportSettings = 
@@ -126,8 +131,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendSingleMessage(TestDeviceType.Sasl, transportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [IotHub]
         public async Task Message_ModuleSendSingleMessage_AmqpWs_WithProxy()
         {
             Client.AmqpTransportSettings amqpTransportSettings = new Client.AmqpTransportSettings(Client.TransportType.Amqp_WebSocket_Only);
@@ -137,8 +142,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendSingleMessageModule(TestDeviceType.Sasl, transportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [IotHub]
         public async Task Message_ModuleSendSingleMessage_MqttWs_WithProxy()
         {
             Client.Transport.Mqtt.MqttTransportSettings mqttTransportSettings = 
@@ -149,68 +154,78 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendSingleMessageModule(TestDeviceType.Sasl, transportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendSingleMessage_Amqp()
         {
             await SendSingleMessage(TestDeviceType.X509, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendSingleMessage_AmqpWs()
         {
             await SendSingleMessage(TestDeviceType.X509, Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendSingleMessage_Mqtt()
         {
             await SendSingleMessage(TestDeviceType.X509, Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendSingleMessage_MqttWs()
         {
             await SendSingleMessage(TestDeviceType.X509, Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendSingleMessage_Http()
         {
             await SendSingleMessage(TestDeviceType.X509, Client.TransportType.Http1).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendBatchMessages_Amqp()
         {
             await SendBatchMessages(TestDeviceType.X509, Client.TransportType.Amqp_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendBatchMessages_AmqpWs()
         {
             await SendBatchMessages(TestDeviceType.X509, Client.TransportType.Amqp_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendBatchMessages_Mqtt()
         {
             await SendBatchMessages(TestDeviceType.X509, Client.TransportType.Mqtt_Tcp_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendBatchMessages_MqttWs()
         {
             await SendBatchMessages(TestDeviceType.X509, Client.TransportType.Mqtt_WebSocket_Only).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task X509_DeviceSendBatchMessages_Http()
         {
             await SendBatchMessages(TestDeviceType.X509, Client.TransportType.Http1).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(MessageTooLargeException))]
+        [Fact]
+        [IotHub]
         public async Task Message_ClientThrowsForMqttTopicNameTooLong()
         {
             TestDevice testDevice = await TestDevice.GetTestDeviceAsync(DevicePrefix).ConfigureAwait(false);
@@ -227,7 +242,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                     msg.Properties.Add(Guid.NewGuid().ToString(), new string('1', 1024));
                 }
 
-                await deviceClient.SendEventAsync(msg).ConfigureAwait(false);
+                await Assert.ThrowsAsync<MessageTooLargeException>(() => deviceClient.SendEventAsync(msg)).ConfigureAwait(false);
             }
         }
 
@@ -284,7 +299,7 @@ namespace Microsoft.Azure.Devices.E2ETests
             await deviceClient.SendEventAsync(testMessage).ConfigureAwait(false);
 
             bool isReceived = EventHubTestListener.VerifyIfMessageIsReceived(deviceId, payload, p1Value);
-            Assert.IsTrue(isReceived, "Message is not received.");
+            Assert.True(isReceived, "Message is not received.");
         }
 
         public static async Task SendSendBatchMessagesAndVerifyAsync(DeviceClient deviceClient, string deviceId)
@@ -303,7 +318,7 @@ namespace Microsoft.Azure.Devices.E2ETests
             foreach (Tuple<string, string> prop in props)
             {
                 bool isReceived = EventHubTestListener.VerifyIfMessageIsReceived(deviceId, prop.Item1, prop.Item2);
-                Assert.IsTrue(isReceived, "Message is not received.");
+                Assert.True(isReceived, "Message is not received.");
             }
         }
 
@@ -313,7 +328,7 @@ namespace Microsoft.Azure.Devices.E2ETests
             await moduleClient.SendEventAsync(testMessage).ConfigureAwait(false);
 
             bool isReceived = EventHubTestListener.VerifyIfMessageIsReceived(deviceId, payload, p1Value);
-            Assert.IsTrue(isReceived, "Message is not received.");
+            Assert.True(isReceived, "Message is not received.");
         }
 
         public static (Client.Message message, string messageId, string payload, string p1Value) ComposeD2CTestMessage()

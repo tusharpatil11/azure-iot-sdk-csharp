@@ -3,17 +3,12 @@
 
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Client.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 // If you see intermittent failures on devices that are created by this file, check to see if you have multiple suites 
 // running at the same time because one test run could be accidentally destroying devices created by a different test run.
@@ -163,9 +158,9 @@ namespace Microsoft.Azure.Devices.E2ETests
                 await deviceClient.OpenAsync().ConfigureAwait(false);
                 if (transport != Client.TransportType.Http1)
                 {
-                    Assert.IsTrue(connectionStatusChangeCount >= 1, $"The expected connection status change should be equal or greater than 1 but was {connectionStatusChangeCount}"); // Normally one connection but in some cases, due to network issues we might have already retried several times to connect.
-                    Assert.AreEqual(ConnectionStatus.Connected, lastConnectionStatus, $"The expected connection status should be {ConnectionStatus.Connected} but was {lastConnectionStatus}");
-                    Assert.AreEqual(ConnectionStatusChangeReason.Connection_Ok, lastConnectionStatusChangeReason, $"The expected connection status change reason should be {ConnectionStatusChangeReason.Connection_Ok} but was {lastConnectionStatusChangeReason}");
+                    Assert.True(connectionStatusChangeCount >= 1, $"The expected connection status change should be equal or greater than 1 but was {connectionStatusChangeCount}"); // Normally one connection but in some cases, due to network issues we might have already retried several times to connect.
+                    Assert.Equal(ConnectionStatus.Connected, lastConnectionStatus);
+                    Assert.Equal(ConnectionStatusChangeReason.Connection_Ok, lastConnectionStatusChangeReason);
                 }
 
                 await initOperation(deviceClient, testDevice).ConfigureAwait(false);
@@ -197,7 +192,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                         await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
                     }
 
-                    Assert.IsTrue(isFaulted, $"The device {testDevice.Id} did not get faulted with fault type: {faultType}");
+                    Assert.True(isFaulted, $"The device {testDevice.Id} did not get faulted with fault type: {faultType}");
                     s_log.WriteLine($"{nameof(FaultInjection)}: Confirmed fault injection has been actived.");
 
                     // Check the device is back online
@@ -207,7 +202,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                         await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
                     }
 
-                    Assert.AreEqual(ConnectionStatus.Connected, lastConnectionStatus, $"{testDevice.Id} did not reconnect.");
+                    Assert.Equal(ConnectionStatus.Connected, lastConnectionStatus);
                     s_log.WriteLine($"{nameof(FaultInjection)}: Confirmed device back online.");
 
                     // Perform the test operation.
@@ -235,17 +230,17 @@ namespace Microsoft.Azure.Devices.E2ETests
                         // 4 is the minimum notification count: connect, fault, reconnect, disable.
                         // There are cases where the retry must be timed out (i.e. very likely for MQTT where otherwise 
                         // we would attempt to send the fault injection forever.)
-                        Assert.IsTrue(connectionStatusChangeCount >= 4, $"The expected connection status change count for {testDevice.Id} should be equal or greater than 4 but was {connectionStatusChangeCount}");
+                        Assert.True(connectionStatusChangeCount >= 4, $"The expected connection status change count for {testDevice.Id} should be equal or greater than 4 but was {connectionStatusChangeCount}");
                     }
                     else
                     {
                         // 2 is the minimum notification count: connect, disable.
                         // We will monitor the test environment real network stability and switch to >=2 if necessary to 
                         // account for real network issues.
-                        Assert.IsTrue(connectionStatusChangeCount == 2, $"The expected connection status change count for {testDevice.Id}  should be 2 but was {connectionStatusChangeCount}");
+                        Assert.True(connectionStatusChangeCount == 2, $"The expected connection status change count for {testDevice.Id}  should be 2 but was {connectionStatusChangeCount}");
                     }
-                    Assert.AreEqual(ConnectionStatus.Disabled, lastConnectionStatus, $"The expected connection status should be {ConnectionStatus.Disabled} but was {lastConnectionStatus}");
-                    Assert.AreEqual(ConnectionStatusChangeReason.Client_Close, lastConnectionStatusChangeReason, $"The expected connection status change reason should be {ConnectionStatusChangeReason.Client_Close} but was {lastConnectionStatusChangeReason}");
+                    Assert.Equal(ConnectionStatus.Disabled, lastConnectionStatus);
+                    Assert.Equal(ConnectionStatusChangeReason.Client_Close, lastConnectionStatusChangeReason);
                 }
             }
             finally

@@ -2,19 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Tracing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public class MessageReceiveE2EPoolAmqpTests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(MessageReceiveE2EPoolAmqpTests)}_";
@@ -26,9 +21,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Message_DeviceSak_DeviceReceiveSingleMessage_SingleConnection_Amqp()
         {
             await ReceiveMessagePoolOverAmqp(
@@ -37,9 +31,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 PoolingOverAmqp.SingleConnection_DevicesCount).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Message_DeviceSak_DeviceReceiveSingleMessage_SingleConnection_AmqpWs()
         {
             await ReceiveMessagePoolOverAmqp(
@@ -48,9 +41,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 PoolingOverAmqp.SingleConnection_DevicesCount).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]
         public async Task Message_IoTHubSak_DeviceReceiveSingleMessage_SingleConnection_Amqp()
         {
             await ReceiveMessagePoolOverAmqp(
@@ -60,9 +52,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        // TODO: #943 - Honor different pool sizes for different connection pool settings.
-        [Ignore]
-        [TestMethod]
+        [Fact(Skip = "TODO: #943 - Honor different pool sizes for different connection pool settings.")]
+        [IotHub]        
         public async Task Message_IoTHubSak_DeviceReceiveSingleMessage_SingleConnection_AmqpWs()
         {
             await ReceiveMessagePoolOverAmqp(
@@ -72,7 +63,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSak_DeviceReceiveSingleMessage_MultipleConnections_Amqp()
         {
             await ReceiveMessagePoolOverAmqp(
@@ -81,7 +73,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 PoolingOverAmqp.MultipleConnections_DevicesCount).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_DeviceSak_DeviceReceiveSingleMessage_MultipleConnections_AmqpWs()
         {
             await ReceiveMessagePoolOverAmqp(
@@ -90,7 +83,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 PoolingOverAmqp.MultipleConnections_DevicesCount).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_IoTHubSak_DeviceReceiveSingleMessage_MultipleConnections_Amqp()
         {
             await ReceiveMessagePoolOverAmqp(
@@ -100,7 +94,8 @@ namespace Microsoft.Azure.Devices.E2ETests
                 ConnectionStringAuthScope.IoTHub).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Message_IoTHubSak_DeviceReceiveSingleMessage_MultipleConnections_AmqpWs()
         {
             await ReceiveMessagePoolOverAmqp(

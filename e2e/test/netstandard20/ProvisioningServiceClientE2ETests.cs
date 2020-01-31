@@ -5,20 +5,18 @@ using Microsoft.Azure.Devices.Common;
 using Microsoft.Azure.Devices.Provisioning.Security.Samples;
 using Microsoft.Azure.Devices.Provisioning.Service;
 using Microsoft.Azure.Devices.Shared;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
     using HttpTransportSettings = Microsoft.Azure.Devices.Provisioning.Service.HttpTransportSettings;
 
-    [TestClass]
-    [TestCategory("Provisioning-E2E")]
     public class ProvisioningServiceClientE2ETests : IDisposable
     {
         public enum AttestationType
@@ -41,53 +39,57 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_IndividualEnrollments_Query_HttpWithProxy_Ok()
         {
             await ProvisioningServiceClient_IndividualEnrollments_Query_Ok(ProxyServerAddress).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_Tpm_IndividualEnrollments_Create_HttpWithProxy_Ok()
         {
             await ProvisioningServiceClient_IndividualEnrollments_Create_Ok(ProxyServerAddress, AttestationType.Tpm).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_SymmetricKey_IndividualEnrollments_Create_HttpWithProxy_Ok()
         {
             await ProvisioningServiceClient_IndividualEnrollments_Create_Ok(ProxyServerAddress, AttestationType.SymmetricKey).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_Tpm_IndividualEnrollments_Create_HttpWithoutProxy_Ok()
         {
             await ProvisioningServiceClient_IndividualEnrollments_Create_Ok("", AttestationType.Tpm).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_SymmetricKey_IndividualEnrollments_Create_HttpWithoutProxy_Ok()
         {
             await ProvisioningServiceClient_IndividualEnrollments_Create_Ok("", AttestationType.SymmetricKey).ConfigureAwait(false);
         }
 
-        [TestMethod]
-        [TestCategory("ProxyE2ETests")]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_SymmetricKey_GroupEnrollments_Create_HttpWithProxy_Ok()
         {
             await ProvisioningServiceClient_GroupEnrollments_Create_Ok(ProxyServerAddress, AttestationType.SymmetricKey).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_SymmetricKey_GroupEnrollments_Create_Http_Ok()
         {
             await ProvisioningServiceClient_GroupEnrollments_Create_Ok("", AttestationType.SymmetricKey).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_SymmetricKey_GroupEnrollments_Create_Http_Ok_WithReprovisioningFields()
         {
             //This webhook won't actually work for reprovisioning, but this test is only testing that the field is accepted by the service
@@ -98,7 +100,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await ProvisioningServiceClient_GroupEnrollments_Create_Ok("", AttestationType.SymmetricKey, reprovisionPolicy, allocationPolicy, customAllocationDefinition, null).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_SymmetricKey_IndividualEnrollment_Create_Http_Ok_WithReprovisioningFields()
         {
             //This webhook won't actually work for reprovisioning, but this test is only testing that the field is accepted by the service
@@ -123,7 +126,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 while (query.HasNext())
                 {
                     QueryResult queryResult = await query.NextAsync().ConfigureAwait(false);
-                    Assert.AreEqual(queryResult.Type, QueryResultType.Enrollment);
+                    Assert.Equal(queryResult.Type, QueryResultType.Enrollment);
                 }
             }
         }
@@ -139,22 +142,22 @@ namespace Microsoft.Azure.Devices.E2ETests
             {
                 IndividualEnrollment individualEnrollment = await CreateIndividualEnrollment(provisioningServiceClient, attestationType, reprovisionPolicy, allocationPolicy, customAllocationDefinition, iotHubsToProvisionTo, null).ConfigureAwait(false);
                 IndividualEnrollment individualEnrollmentResult = await provisioningServiceClient.GetIndividualEnrollmentAsync(individualEnrollment.RegistrationId).ConfigureAwait(false);
-                Assert.AreEqual(individualEnrollmentResult.ProvisioningStatus, ProvisioningStatus.Enabled);
+                Assert.Equal(ProvisioningStatus.Enabled, individualEnrollmentResult.ProvisioningStatus);
 
                 if (reprovisionPolicy != null)
                 {
-                    Assert.AreEqual(reprovisionPolicy.UpdateHubAssignment, individualEnrollmentResult.ReprovisionPolicy.UpdateHubAssignment);
-                    Assert.AreEqual(reprovisionPolicy.MigrateDeviceData, individualEnrollmentResult.ReprovisionPolicy.MigrateDeviceData);
+                    Assert.Equal(reprovisionPolicy.UpdateHubAssignment, individualEnrollmentResult.ReprovisionPolicy.UpdateHubAssignment);
+                    Assert.Equal(reprovisionPolicy.MigrateDeviceData, individualEnrollmentResult.ReprovisionPolicy.MigrateDeviceData);
                 }
 
                 if (customAllocationDefinition != null)
                 {
-                    Assert.AreEqual(customAllocationDefinition.WebhookUrl, individualEnrollmentResult.CustomAllocationDefinition.WebhookUrl);
-                    Assert.AreEqual(customAllocationDefinition.ApiVersion, individualEnrollmentResult.CustomAllocationDefinition.ApiVersion);
+                    Assert.Equal(customAllocationDefinition.WebhookUrl, individualEnrollmentResult.CustomAllocationDefinition.WebhookUrl);
+                    Assert.Equal(customAllocationDefinition.ApiVersion, individualEnrollmentResult.CustomAllocationDefinition.ApiVersion);
                 }
 
                 //allocation policy is never null
-                Assert.AreEqual(allocationPolicy, individualEnrollmentResult.AllocationPolicy);
+                Assert.Equal(allocationPolicy, individualEnrollmentResult.AllocationPolicy);
 
                 await provisioningServiceClient.DeleteIndividualEnrollmentAsync(individualEnrollment.RegistrationId).ConfigureAwait(false);
             }
@@ -172,21 +175,21 @@ namespace Microsoft.Azure.Devices.E2ETests
             {
                 EnrollmentGroup enrollmentGroup = await CreateEnrollmentGroup(provisioningServiceClient, attestationType, groupId, reprovisionPolicy, allocationPolicy, customAllocationDefinition, iothubs, null).ConfigureAwait(false);
                 EnrollmentGroup enrollmentGroupResult = await provisioningServiceClient.GetEnrollmentGroupAsync(enrollmentGroup.EnrollmentGroupId).ConfigureAwait(false);
-                Assert.AreEqual(enrollmentGroupResult.ProvisioningStatus, ProvisioningStatus.Enabled);
+                Assert.Equal(enrollmentGroupResult.ProvisioningStatus, ProvisioningStatus.Enabled);
 
                 if (reprovisionPolicy != null)
                 {
-                    Assert.AreEqual(reprovisionPolicy.MigrateDeviceData, enrollmentGroupResult.ReprovisionPolicy.MigrateDeviceData);
-                    Assert.AreEqual(reprovisionPolicy.UpdateHubAssignment, enrollmentGroupResult.ReprovisionPolicy.UpdateHubAssignment);
+                    Assert.Equal(reprovisionPolicy.MigrateDeviceData, enrollmentGroupResult.ReprovisionPolicy.MigrateDeviceData);
+                    Assert.Equal(reprovisionPolicy.UpdateHubAssignment, enrollmentGroupResult.ReprovisionPolicy.UpdateHubAssignment);
                 }
 
                 if (customAllocationDefinition != null)
                 {
-                    Assert.AreEqual(customAllocationDefinition.WebhookUrl, enrollmentGroupResult.CustomAllocationDefinition.WebhookUrl);
-                    Assert.AreEqual(customAllocationDefinition.ApiVersion, enrollmentGroupResult.CustomAllocationDefinition.ApiVersion);
+                    Assert.Equal(customAllocationDefinition.WebhookUrl, enrollmentGroupResult.CustomAllocationDefinition.WebhookUrl);
+                    Assert.Equal(customAllocationDefinition.ApiVersion, enrollmentGroupResult.CustomAllocationDefinition.ApiVersion);
                 }
 
-                Assert.AreEqual(allocationPolicy, enrollmentGroup.AllocationPolicy);
+                Assert.Equal(allocationPolicy, enrollmentGroup.AllocationPolicy);
 
                 try
                 {

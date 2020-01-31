@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Azure.Devices.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
@@ -10,11 +9,10 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("IoTHub-E2E")]
     public class MethodE2ETests : IDisposable
     {
         public const string DeviceResponseJson = "{\"name\":\"e2e_test\"}";
@@ -33,79 +31,92 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponse_Mqtt()
         {
             await SendMethodAndRespond(Client.TransportType.Mqtt_Tcp_Only, SetDeviceReceiveMethod).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponse_MqttWs()
         {
             await SendMethodAndRespond(Client.TransportType.Mqtt_WebSocket_Only, SetDeviceReceiveMethod).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponseWithObseletedSetMethodHandler_Mqtt()
         {
             await SendMethodAndRespond(Client.TransportType.Mqtt_Tcp_Only, SetDeviceReceiveMethodObsoleteHandler).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponseWithObseletedSetMethodHandler_MqttWs()
         {
             await SendMethodAndRespond(Client.TransportType.Mqtt_WebSocket_Only, SetDeviceReceiveMethodObsoleteHandler).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponseWithDefaultMethodHandler_Mqtt()
         {
             await SendMethodAndRespond(Client.TransportType.Mqtt_Tcp_Only, SetDeviceReceiveMethodDefaultHandler).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponseWithDefaultMethodHandler_MqttWs()
         {
             await SendMethodAndRespond(Client.TransportType.Mqtt_WebSocket_Only, SetDeviceReceiveMethodDefaultHandler).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponse_Amqp()
         {
             await SendMethodAndRespond(Client.TransportType.Amqp_Tcp_Only, SetDeviceReceiveMethod).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponse_AmqpWs()
         {
             await SendMethodAndRespond(Client.TransportType.Amqp_WebSocket_Only, SetDeviceReceiveMethod).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponseWithObseletedSetMethodHandler_Amqp()
         {
             await SendMethodAndRespond(Client.TransportType.Amqp_Tcp_Only, SetDeviceReceiveMethodObsoleteHandler).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponseWithObseletedSetMethodHandler_AmqpWs()
         {
             await SendMethodAndRespond(Client.TransportType.Amqp_WebSocket_Only, SetDeviceReceiveMethodObsoleteHandler).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponseWithDefaultMethodHandler_Amqp()
         {
             await SendMethodAndRespond(Client.TransportType.Amqp_Tcp_Only, SetDeviceReceiveMethodDefaultHandler).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_DeviceReceivesMethodAndResponseWithDefaultMethodHandler_AmqpWs()
         {
             await SendMethodAndRespond(Client.TransportType.Amqp_WebSocket_Only, SetDeviceReceiveMethodDefaultHandler).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_ServiceSendsMethodThroughProxyWithDefaultTimeout()
         {
             ServiceClientTransportSettings serviceClientTransportSettings = new ServiceClientTransportSettings
@@ -116,7 +127,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             await SendMethodAndRespond(Client.TransportType.Mqtt_Tcp_Only, SetDeviceReceiveMethod, serviceClientTransportSettings).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task Method_ServiceSendsMethodThroughProxyWithCustomTimeout()
         {
             ServiceClientTransportSettings serviceClientTransportSettings = new ServiceClientTransportSettings
@@ -138,9 +150,9 @@ namespace Microsoft.Azure.Devices.E2ETests
                         new CloudToDeviceMethod(methodName, DefaultMethodTimeoutMinutes).SetPayloadJson(reqJson)).ConfigureAwait(false);
 
                 _log.WriteLine($"{nameof(ServiceSendMethodAndVerifyResponse)}: Method status: {response.Status}.");
-                Assert.AreEqual(200, response.Status, $"The expected response status should be 200 but was {response.Status}");
+                Assert.Equal(200, response.Status);
                 string payload = response.GetPayloadAsJson();
-                Assert.AreEqual(respJson, payload, $"The expected response payload should be {respJson} but was {payload}");
+                Assert.Equal(respJson, payload);
 
                 await serviceClient.CloseAsync().ConfigureAwait(false);
             }
@@ -157,9 +169,9 @@ namespace Microsoft.Azure.Devices.E2ETests
                         new CloudToDeviceMethod(methodName, responseTimeout).SetPayloadJson(reqJson)).ConfigureAwait(false);
 
                 _log.WriteLine($"{nameof(ServiceSendMethodAndVerifyResponse)}: Method status: {response.Status}.");
-                Assert.AreEqual(200, response.Status, $"The expected response status should be 200 but was {response.Status}");
+                Assert.Equal(200, response.Status);
                 string payload = response.GetPayloadAsJson();
-                Assert.AreEqual(respJson, payload, $"The expected response payload should be {respJson} but was {payload}");
+                Assert.Equal(respJson, payload);
 
                 await serviceClient.CloseAsync().ConfigureAwait(false);
             }
@@ -176,8 +188,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                     try
                     {
-                        Assert.AreEqual(methodName, request.Name, $"The expected method name should be {methodName} but was {request.Name}");
-                        Assert.AreEqual(ServiceRequestJson, request.DataAsJson, $"The expected respose payload should be {ServiceRequestJson} but was {request.DataAsJson}");
+                        Assert.Equal(methodName, request.Name);
+                        Assert.Equal(ServiceRequestJson, request.DataAsJson);
 
                         methodCallReceived.SetResult(true);
                     }
@@ -205,8 +217,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                     try
                     {
-                        Assert.AreEqual(methodName, request.Name, $"The expected method name should be {methodName} but was {request.Name}");
-                        Assert.AreEqual(ServiceRequestJson, request.DataAsJson, $"The expected respose payload should be {ServiceRequestJson} but was {request.DataAsJson}");
+                        Assert.Equal(methodName, request.Name);
+                        Assert.Equal(ServiceRequestJson, request.DataAsJson);
 
                         methodCallReceived.SetResult(true);
                     }
@@ -233,8 +245,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                 try
                 {
-                    Assert.AreEqual(methodName, request.Name, $"The expected method name should be {methodName} but was {request.Name}");
-                    Assert.AreEqual(ServiceRequestJson, request.DataAsJson, $"The expected respose payload should be {ServiceRequestJson} but was {request.DataAsJson}");
+                    Assert.Equal(methodName, request.Name);
+                    Assert.Equal(ServiceRequestJson, request.DataAsJson);
 
                     methodCallReceived.SetResult(true);
                 }

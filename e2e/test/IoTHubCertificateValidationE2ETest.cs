@@ -3,18 +3,16 @@
 
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Common.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.Tracing;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using System.Security.Authentication;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("InvalidServiceCertificate")]
     public class IoTHubCertificateValidationE2ETest : IDisposable
     {
         private readonly TestLogging _log = TestLogging.GetInstance();
@@ -25,37 +23,40 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task RegistryManager_QueryDevicesInvalidServiceCertificateHttp_Fails()
         {
             var rm = RegistryManager.CreateFromConnectionString(Configuration.IoTHub.ConnectionStringInvalidServiceCertificate);
             IQuery query = rm.CreateQuery("select * from devices");
-            var exception = await Assert.ThrowsExceptionAsync<IotHubCommunicationException>(
+            var exception = await Assert.ThrowsAsync<IotHubCommunicationException>(
                 () => query.GetNextAsTwinAsync()).ConfigureAwait(false);
 
 #if NET451 || NET47
-            Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.InnerException.GetType());
 #else
-            Assert.IsInstanceOfType(exception.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.GetType());
 #endif
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task ServiceClient_SendMessageToDeviceInvalidServiceCertificateAmqpTcp_Fails()
         {
             var transport = TransportType.Amqp;
-            await Assert.ThrowsExceptionAsync<AuthenticationException>(
+            await Assert.ThrowsAsync<AuthenticationException>(
                 () => TestServiceClientInvalidServiceCertificate(transport)).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task ServiceClient_SendMessageToDeviceInvalidServiceCertificateAmqpWs_Fails()
         {
             var transport = TransportType.Amqp_WebSocket_Only;
-            var exception = await Assert.ThrowsExceptionAsync<WebSocketException>(
+            var exception = await Assert.ThrowsAsync<WebSocketException>(
                 () => TestServiceClientInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
-            Assert.IsInstanceOfType(exception.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.GetType());
         }
 
         private static async Task TestServiceClientInvalidServiceCertificate(TransportType transport)
@@ -66,11 +67,12 @@ namespace Microsoft.Azure.Devices.E2ETests
             await service.SendAsync("testDevice1", new Message()).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task JobClient_ScheduleTwinUpdateInvalidServiceCertificateHttp_Fails()
         {
             var job = JobClient.CreateFromConnectionString(Configuration.IoTHub.ConnectionStringInvalidServiceCertificate);
-            var exception = await Assert.ThrowsExceptionAsync<IotHubCommunicationException>(
+            var exception = await Assert.ThrowsAsync<IotHubCommunicationException>(
                 () => job.ScheduleTwinUpdateAsync(
                     "testDevice",
                     "DeviceId IN ['testDevice']",
@@ -79,60 +81,65 @@ namespace Microsoft.Azure.Devices.E2ETests
                     60)).ConfigureAwait(false);
 
 #if NET451 || NET47
-            Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.InnerException.GetType());
 #else
-            Assert.IsInstanceOfType(exception.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.GetType());
 #endif
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_SendAsyncInvalidServiceCertificateAmqpTcp_Fails()
         {
             var transport = Client.TransportType.Amqp_Tcp_Only;
-            await Assert.ThrowsExceptionAsync<AuthenticationException>(
+            await Assert.ThrowsAsync<AuthenticationException>(
                 () => TestDeviceClientInvalidServiceCertificate(transport)).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_SendAsyncInvalidServiceCertificateMqttTcp_Fails()
         {
             var transport = Client.TransportType.Mqtt_Tcp_Only;
-            await Assert.ThrowsExceptionAsync<AuthenticationException>(
+            await Assert.ThrowsAsync<AuthenticationException>(
                 () => TestDeviceClientInvalidServiceCertificate(transport)).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_SendAsyncInvalidServiceCertificateHttp_Fails()
         {
             var transport = Client.TransportType.Http1;
-            var exception = await Assert.ThrowsExceptionAsync<AuthenticationException>(
+            var exception = await Assert.ThrowsAsync<AuthenticationException>(
                 () => TestDeviceClientInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
 #if NET451 || NET47
-            Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.InnerException.GetType());
 #else
-            Assert.IsInstanceOfType(exception.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.GetType());
 #endif
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_SendAsyncInvalidServiceCertificateAmqpWs_Fails()
         {
             var transport = Client.TransportType.Amqp_WebSocket_Only;
-            var exception = await Assert.ThrowsExceptionAsync<AuthenticationException>(
+            var exception = await Assert.ThrowsAsync<AuthenticationException>(
                 () => TestDeviceClientInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
-            Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.GetType());
         }
 
-        [TestMethod]
+        [Fact]
+        [IotHub]
         public async Task DeviceClient_SendAsyncInvalidServiceCertificateMqttWs_Fails()
         {
             var transport = Client.TransportType.Mqtt_WebSocket_Only;
-            var exception = await Assert.ThrowsExceptionAsync<AuthenticationException>(
+            var exception = await Assert.ThrowsAsync<AuthenticationException>(
                 () => TestDeviceClientInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
-            Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+            Assert.Equal(typeof(AuthenticationException), exception.GetType());
         }
 
         private static async Task TestDeviceClientInvalidServiceCertificate(Client.TransportType transport)

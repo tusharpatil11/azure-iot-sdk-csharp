@@ -7,7 +7,6 @@ using Microsoft.Azure.Devices.Provisioning.Client.Transport;
 using Microsoft.Azure.Devices.Provisioning.Security.Samples;
 using Microsoft.Azure.Devices.Provisioning.Service;
 using Microsoft.Azure.Devices.Shared;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -17,13 +16,12 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 using static Microsoft.Azure.Devices.E2ETests.ProvisioningE2ETests;
 using static Microsoft.Azure.Devices.E2ETests.ProvisioningServiceClientE2ETests;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("Provisioning-E2E")]
     public class ReprovisioningE2ETests : IDisposable
     {
         private const int PassingTimeoutMiliseconds = 10 * 60 * 1000;
@@ -43,170 +41,198 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceResetsTwin_MqttWs_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Mqtt_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceResetsTwin_Mqtt_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Mqtt_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceResetsTwin_AmqpWs_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Amqp_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceResetsTwin_Amqp_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_KeepTwin(Client.TransportType.Amqp_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceKeepsTwin_MqttWs_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Mqtt_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceKeepsTwin_Mqtt_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Mqtt_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceKeepsTwin_AmqpWs_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_KeepTwin(Client.TransportType.Amqp_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceKeepsTwin_Amqp_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_KeepTwin(Client.TransportType.Amqp_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningWorks_Http_SymmetricKey_RegisterOk_Individual()
         {
             //twin is irrelevant since HTTP Device Clients can't use twin
             await ProvisioningDeviceClient_ReprovisioningFlow_KeepTwin(Client.TransportType.Http1, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_Http_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Http1, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_Mqtt_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Mqtt_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_Amqp_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Amqp_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_AmqpWs_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Amqp_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_MqttWs_SymmetricKey_RegisterOk_Individual()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Http1, AttestationType.SymmetricKey, EnrollmentType.Individual, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceResetsTwin_MqttWs_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Mqtt_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceResetsTwin_Mqtt_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Mqtt_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceResetsTwin_AmqpWs_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Amqp_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceResetsTwin_Amqp_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_KeepTwin(Client.TransportType.Amqp_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceKeepsTwin_MqttWs_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Mqtt_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceKeepsTwin_Mqtt_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_ResetTwin(Client.TransportType.Mqtt_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceKeepsTwin_AmqpWs_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_KeepTwin(Client.TransportType.Amqp_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisionedDeviceKeepsTwin_Amqp_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_KeepTwin(Client.TransportType.Amqp_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningWorks_Http_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_KeepTwin(Client.TransportType.Http1, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_Http_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Http1, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_Mqtt_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Mqtt_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_Amqp_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Amqp_Tcp_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_AmqpWs_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Amqp_WebSocket_Only, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_ReprovisioningBlockingWorks_MqttWs_SymmetricKey_RegisterOk_Group()
         {
             await ProvisioningDeviceClient_ReprovisioningFlow_DoNotReprovision(Client.TransportType.Http1, AttestationType.SymmetricKey, EnrollmentType.Group, false).ConfigureAwait(false);
@@ -339,7 +365,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 {
                     //Confirm that the device twin reflects what the enrollment dictated
                     Twin twin = await iotClient.GetTwinAsync().ConfigureAwait(false);
-                    Assert.AreEqual(capabilities.IotEdge, twin.Capabilities.IotEdge);
+                    Assert.Equal(capabilities.IotEdge, twin.Capabilities.IotEdge);
                 }
             }
         }
@@ -395,7 +421,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                     {
                         case EnrollmentType.Group:
                             EnrollmentGroup symmetricKeyEnrollmentGroup = await CreateEnrollmentGroup(provisioningServiceClient, AttestationType.SymmetricKey, groupId, reprovisionPolicy, allocationPolicy, customAllocationDefinition, iothubs, capabilities).ConfigureAwait(false);
-                            Assert.IsTrue(symmetricKeyEnrollmentGroup.Attestation is SymmetricKeyAttestation);
+                            Assert.True(symmetricKeyEnrollmentGroup.Attestation is SymmetricKeyAttestation);
                             SymmetricKeyAttestation symmetricKeyAttestation = (SymmetricKeyAttestation)symmetricKeyEnrollmentGroup.Attestation;
                             string registrationIdSymmetricKey = IdPrefix + Guid.NewGuid();
                             string primaryKeyEnrollmentGroup = symmetricKeyAttestation.PrimaryKey;
@@ -408,7 +434,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                         case EnrollmentType.Individual:
                             IndividualEnrollment symmetricKeyEnrollment = await CreateIndividualEnrollment(provisioningServiceClient, AttestationType.SymmetricKey, reprovisionPolicy, allocationPolicy, customAllocationDefinition, iothubs, capabilities).ConfigureAwait(false);
 
-                            Assert.IsTrue(symmetricKeyEnrollment.Attestation is SymmetricKeyAttestation);
+                            Assert.True(symmetricKeyEnrollment.Attestation is SymmetricKeyAttestation);
                             symmetricKeyAttestation = (SymmetricKeyAttestation)symmetricKeyEnrollment.Attestation;
 
                             registrationIdSymmetricKey = symmetricKeyEnrollment.RegistrationId;
@@ -458,13 +484,13 @@ namespace Microsoft.Azure.Devices.E2ETests
         /// </summary>
         private void ValidateDeviceRegistrationResult(DeviceRegistrationResult result)
         {
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
             _log.WriteLine($"{result.Status} (Error Code: {result.ErrorCode}; Error Message: {result.ErrorMessage})");
             _log.WriteLine($"ProvisioningDeviceClient AssignedHub: {result.AssignedHub}; DeviceID: {result.DeviceId}");
 
-            Assert.AreEqual(ProvisioningRegistrationStatusType.Assigned, result.Status);
-            Assert.IsNotNull(result.AssignedHub);
-            Assert.IsNotNull(result.DeviceId);
+            Assert.Equal(ProvisioningRegistrationStatusType.Assigned, result.Status);
+            Assert.NotNull(result.AssignedHub);
+            Assert.NotNull(result.DeviceId);
         }
 
         /// <summary>
@@ -493,18 +519,18 @@ namespace Microsoft.Azure.Devices.E2ETests
         {
             if (reprovisionPolicy.UpdateHubAssignment)
             {
-                Assert.IsTrue(iotHubsToReprovisionTo.Contains(result.AssignedHub));
-                Assert.IsFalse(iotHubsToStartAt.Contains(result.AssignedHub));
+                Assert.True(iotHubsToReprovisionTo.Contains(result.AssignedHub));
+                Assert.False(iotHubsToStartAt.Contains(result.AssignedHub));
 
                 if (allocationPolicy == AllocationPolicy.GeoLatency)
                 {
-                    Assert.AreNotEqual(result.AssignedHub, Configuration.Provisioning.FarAwayIotHubHostName);
+                    Assert.NotEqual(result.AssignedHub, Configuration.Provisioning.FarAwayIotHubHostName);
                 }
             }
             else
             {
-                Assert.IsFalse(iotHubsToReprovisionTo.Contains(result.AssignedHub));
-                Assert.IsTrue(iotHubsToStartAt.Contains(result.AssignedHub));
+                Assert.False(iotHubsToReprovisionTo.Contains(result.AssignedHub));
+                Assert.True(iotHubsToStartAt.Contains(result.AssignedHub));
             }
         }
 
@@ -526,19 +552,19 @@ namespace Microsoft.Azure.Devices.E2ETests
 
                     if (reprovisionPolicy.MigrateDeviceData)
                     {
-                        Assert.AreNotEqual(1, twin.Properties.Desired.Count);
-                        Assert.AreNotEqual(0, twin.Properties.Desired.Version);
-                        Assert.AreEqual(ProvisioningRegistrationSubstatusType.DeviceDataMigrated, result.Substatus);
+                        Assert.NotEqual(1, twin.Properties.Desired.Count);
+                        Assert.NotEqual(0, twin.Properties.Desired.Version);
+                        Assert.Equal(ProvisioningRegistrationSubstatusType.DeviceDataMigrated, result.Substatus);
                     }
                     else if (reprovisionPolicy.UpdateHubAssignment)
                     {
-                        Assert.AreEqual(twin.Properties.Desired.Count, 0);
-                        Assert.AreEqual(ProvisioningRegistrationSubstatusType.DeviceDataReset, result.Substatus);
+                        Assert.Equal(twin.Properties.Desired.Count, 0);
+                        Assert.Equal(ProvisioningRegistrationSubstatusType.DeviceDataReset, result.Substatus);
                     }
                     else
                     {
-                        Assert.AreNotEqual(twin.Properties.Desired.Count, 1);
-                        Assert.AreEqual(ProvisioningRegistrationSubstatusType.InitialAssignment, result.Substatus);
+                        Assert.NotEqual(twin.Properties.Desired.Count, 1);
+                        Assert.Equal(ProvisioningRegistrationSubstatusType.InitialAssignment, result.Substatus);
                     }
                 }
 

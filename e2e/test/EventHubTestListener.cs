@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.Concurrent;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Linq;
+using Xunit;
 
 #if !NET451
 using Microsoft.Azure.EventHubs;
@@ -114,8 +114,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 #else
             var connectionDeviceId = eventData.Properties["iothub-connection-device-id"].ToString();
 #endif
-            Assert.AreEqual(deviceName, connectionDeviceId);
-            Assert.IsTrue(VerifyKeyValue("property1", p1Value, eventData.Properties));
+            Assert.Equal(deviceName, connectionDeviceId);
+            Assert.True(VerifyKeyValue("property1", p1Value, eventData.Properties));
 
             return true;
         }

@@ -1,9 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
+using Xunit.Sdk;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
@@ -61,15 +62,15 @@ namespace Microsoft.Azure.Devices.E2ETests
                     {
                         s_log.WriteLine($"Completing FileNotification: deviceId={fileNotification.DeviceId}, blobName={fileNotification.BlobName}.");
 
-                        Assert.AreEqual(deviceId, fileNotification.DeviceId);
-                        Assert.IsFalse(string.IsNullOrEmpty(fileNotification.BlobUri), "File notification blob uri is null or empty.");
+                        Assert.Equal(deviceId, fileNotification.DeviceId);
+                        Assert.False(string.IsNullOrEmpty(fileNotification.BlobUri), "File notification blob uri is null or empty.");
                         try
                         {
                             await s_fileNotificationReceiver.CompleteAsync(fileNotification).ConfigureAwait(false);
                         }
                         catch (Exception)
                         {
-                            s_log.WriteLine("Ingore any exception while completing file upload notification.");
+                            s_log.WriteLine("Ignore any exception while completing file upload notification.");
                         }
                         return;
                     }
@@ -81,7 +82,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 stopwatch.Stop();
             }
 
-            Assert.Fail($"FileNotification is not received in {s_checkDuration}: deviceId={deviceId}, fileName={fileName}.");
+            throw new XunitException($"FileNotification is not received in {s_checkDuration}: deviceId={deviceId}, fileName={fileName}.");
         }
 
         private static async Task StartReceivingLoopAsync()
@@ -104,7 +105,7 @@ namespace Microsoft.Azure.Devices.E2ETests
                 }
                 catch(Exception)
                 {
-                    s_log.WriteLine("Ingore any exception while receiving/abandon file upload notification.");
+                    s_log.WriteLine("Ignore any exception while receiving/abandon file upload notification.");
                 }
             }
 

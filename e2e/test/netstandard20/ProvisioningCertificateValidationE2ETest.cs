@@ -5,16 +5,14 @@ using Microsoft.Azure.Devices.Provisioning.Client;
 using Microsoft.Azure.Devices.Provisioning.Client.Transport;
 using Microsoft.Azure.Devices.Provisioning.Service;
 using Microsoft.Azure.Devices.Shared;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.Tracing;
 using System.Security.Authentication;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Microsoft.Azure.Devices.E2ETests
 {
-    [TestClass]
-    [TestCategory("InvalidServiceCertificate")]
     public class ProvisioningCertificateValidationE2ETest : IDisposable
     {
         private readonly ConsoleEventListener _listener;
@@ -24,7 +22,8 @@ namespace Microsoft.Azure.Devices.E2ETests
             _listener = TestConfig.StartEventListener();
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningServiceClient_QueryInvalidServiceCertificateHttp_Fails()
         {
             using (var provisioningServiceClient = 
@@ -34,85 +33,90 @@ namespace Microsoft.Azure.Devices.E2ETests
                 Query q = provisioningServiceClient.CreateEnrollmentGroupQuery(
                     new QuerySpecification("SELECT * FROM enrollmentGroups"));
 
-                var exception = await Assert.ThrowsExceptionAsync<ProvisioningServiceClientTransportException>(
+                var exception = await Assert.ThrowsAsync<ProvisioningServiceClientTransportException>(
                     () => q.NextAsync()).ConfigureAwait(false);
 
 #if NET47 || NET451
-                Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+                Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.InnerException.GetType());
 #else
-                Assert.IsInstanceOfType(exception.InnerException.InnerException, typeof(AuthenticationException));
+                Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.GetType());
 #endif
             }
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_RegisterAsyncInvalidServiceCertificateAmqpTcp_Fails()
         {
             using (var transport = new ProvisioningTransportHandlerAmqp(TransportFallbackType.TcpOnly))
             {
-                var exception = await Assert.ThrowsExceptionAsync<ProvisioningTransportException>(
+                var exception = await Assert.ThrowsAsync<ProvisioningTransportException>(
                     () => TestInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
-                Assert.IsInstanceOfType(exception.InnerException, typeof(AuthenticationException));
+                Assert.Equal(typeof(AuthenticationException), exception.InnerException.GetType());
             }
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_RegisterAsyncInvalidServiceCertificateMqttTcp_Fails()
         {
             using (var transport = new ProvisioningTransportHandlerMqtt(TransportFallbackType.TcpOnly))
             {
-                var exception = await Assert.ThrowsExceptionAsync<ProvisioningTransportException>(
+                var exception = await Assert.ThrowsAsync<ProvisioningTransportException>(
                     () => TestInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
                 if (exception.InnerException == null)
                 {
-                    Assert.AreEqual("MQTT Protocol Exception: Channel closed.", exception.Message);
+                    Assert.Equal("MQTT Protocol Exception: Channel closed.", exception.Message);
                 }
                 else
                 {
-                    Assert.IsInstanceOfType(exception.InnerException, typeof(AuthenticationException));
+                    Assert.Equal(typeof(AuthenticationException), exception.InnerException.GetType());
                 }
             }
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_RegisterAsyncInvalidServiceCertificateHttp_Fails()
         {
             using (var transport = new ProvisioningTransportHandlerHttp())
             {
-                var exception = await Assert.ThrowsExceptionAsync<ProvisioningTransportException>(
+                var exception = await Assert.ThrowsAsync<ProvisioningTransportException>(
                     () => TestInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
 #if NET47 || NET451
-                Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+                Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.InnerException.GetType());
 #else
-                Assert.IsInstanceOfType(exception.InnerException.InnerException, typeof(AuthenticationException));
+                Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.GetType());
 #endif
             }
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_RegisterAsyncInvalidServiceCertificateAmqpWs_Fails()
         {
             using (var transport = new ProvisioningTransportHandlerAmqp(TransportFallbackType.WebSocketOnly))
             {
-                var exception = await Assert.ThrowsExceptionAsync<ProvisioningTransportException>(
+                var exception = await Assert.ThrowsAsync<ProvisioningTransportException>(
                     () => TestInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
-                Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+                Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.InnerException.GetType());
             }
         }
 
-        [TestMethod]
+        [Fact]
+        [Provisioning]
         public async Task ProvisioningDeviceClient_RegisterAsyncInvalidServiceCertificateMqttWs_Fails()
         {
             using (var transport = new ProvisioningTransportHandlerMqtt(TransportFallbackType.WebSocketOnly))
             {
-                var exception = await Assert.ThrowsExceptionAsync<ProvisioningTransportException>(
+                var exception = await Assert.ThrowsAsync<ProvisioningTransportException>(
                     () => TestInvalidServiceCertificate(transport)).ConfigureAwait(false);
 
-                Assert.IsInstanceOfType(exception.InnerException.InnerException.InnerException, typeof(AuthenticationException));
+                Assert.Equal(typeof(AuthenticationException), exception.InnerException.InnerException.InnerException.GetType());
             }
         }
 
