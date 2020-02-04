@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Globalization;
+
 namespace System.Diagnostics.Tracing
 {
     public sealed class ConsoleEventListener : EventListener
@@ -61,7 +63,7 @@ namespace System.Diagnostics.Tracing
             {
                 bool shouldDisplay = false;
             
-                if (_eventFilters.Length == 1 && eventData.EventSource.Name.StartsWith(_eventFilters[0]))
+                if (_eventFilters.Length == 1 && eventData.EventSource.Name.StartsWith(_eventFilters[0], StringComparison.OrdinalIgnoreCase))
                 {
                     shouldDisplay = true;
                 }
@@ -69,7 +71,7 @@ namespace System.Diagnostics.Tracing
                 {
                     foreach (string filter in _eventFilters)
                     {
-                        if (eventData.EventSource.Name.StartsWith(filter))
+                        if (eventData.EventSource.Name.StartsWith(filter, StringComparison.OrdinalIgnoreCase))
                         {
                             shouldDisplay = true;
                         }
@@ -79,9 +81,9 @@ namespace System.Diagnostics.Tracing
                 if (shouldDisplay)
                 {
 #if NET451
-                    string text = $"{DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff")} [{eventData.EventSource.Name}-{eventData.EventId}]{(eventData.Payload != null ? $" ({string.Join(", ", eventData.Payload)})." : "")}";
+                    string text = $"{DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff", CultureInfo.InvariantCulture)} [{eventData.EventSource.Name}-{eventData.EventId}]{(eventData.Payload != null ? $" ({string.Join(", ", eventData.Payload)})." : "")}";
 #else
-                    string text = $"{DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff")} [{eventData.EventSource.Name}-{eventData.EventName}]{(eventData.Payload != null ? $" ({string.Join(", ", eventData.Payload)})." : "")}";
+                    string text = $"{DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff", CultureInfo.InvariantCulture)} [{eventData.EventSource.Name}-{eventData.EventName}]{(eventData.Payload != null ? $" ({string.Join(", ", eventData.Payload)})." : "")}";
 #endif
 
                     ConsoleColor origForeground = Console.ForegroundColor;
