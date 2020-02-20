@@ -14,6 +14,7 @@ namespace Microsoft.Azure.Devices.E2ETests
     [TestClass]
     [TestCategory("E2E")]
     [TestCategory("IoTHub")]
+    [TestCategory("FileUpload")]
     public class FileUploadE2ETests : IDisposable
     {
         private readonly string DevicePrefix = $"E2E_{nameof(FileUploadE2ETests)}_";
@@ -29,7 +30,6 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         [TestMethod]
-        [TestCategory("LongRunning")]
         public async Task FileUpload_SmallFile_Http()
         {
             string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
@@ -37,7 +37,6 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         [TestMethod]
-        [TestCategory("LongRunning")]
         public async Task FileUpload_BigFile_Http()
         {
             string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
@@ -45,11 +44,94 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         [TestMethod]
-        [TestCategory("LongRunning")]
         public async Task FileUpload_X509_SmallFile_Http()
         {
             string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
             await UploadFile(Client.TransportType.Http1, smallFile, true).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_SmallFile_Http2()
+        {
+            string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_BigFile_Http2()
+        {
+            string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_SmallFile_Http3()
+        {
+            string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_BigFile_Http3()
+        {
+            string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_SmallFile_Http4()
+        {
+            string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_BigFile_Http4()
+        {
+            string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_SmallFile_Http4()
+        {
+            string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_BigFile_Http4()
+        {
+            string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_SmallFile_Http5()
+        {
+            string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_BigFile_Http5()
+        {
+            string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_SmallFile_Http6()
+        {
+            string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_BigFile_Http6()
+        {
+            string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
         }
 
         private async Task UploadFile(Client.TransportType transport, string filename, bool x509auth = false)

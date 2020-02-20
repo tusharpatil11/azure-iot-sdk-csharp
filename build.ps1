@@ -163,10 +163,7 @@ Function RunTests($message, $framework = "*", $filterTestCategory = "*")
     Write-Host -ForegroundColor Cyan $label
 
     $runTestCmd = "dotnet test --verbosity $verbosity --configuration $configuration --no-build --logger trx"
-    if ($filterTestCategory -ne "*")
-    {
-        $runTestCmd += " --filter '$filterTestCategory'"
-    }
+    $runTestCmd += " --filter 'FileUpload'"
     if ($framework -ne "*")
     {
         $runTestCmd += " --framework $framework"

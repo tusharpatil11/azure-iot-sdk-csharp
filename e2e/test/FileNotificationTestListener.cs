@@ -87,7 +87,7 @@ namespace Microsoft.Azure.Devices.E2ETests
         private static async Task StartReceivingLoopAsync()
         {
             s_log.WriteLine("Starting receiving file notification loop...");
-            
+
             CancellationToken cancellationToken = new CancellationTokenSource(s_duration).Token;
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -97,12 +97,15 @@ namespace Microsoft.Azure.Devices.E2ETests
                     if (fileNotification != null)
                     {
                         string key = RetrieveKey(fileNotification.BlobName);
+
+                        Console.WriteLine($"Received file upload notification for deviceid {fileNotification.DeviceId}");
+
                         s_fileNotifications.TryAdd(key, fileNotification);
                         s_log.WriteLine($"File notification received deviceId={fileNotification.DeviceId}, blobName={fileNotification.BlobName}.");
                         await s_fileNotificationReceiver.AbandonAsync(fileNotification).ConfigureAwait(false);
                     }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     s_log.WriteLine("Ignore any exception while receiving/abandon file upload notification.");
                 }
