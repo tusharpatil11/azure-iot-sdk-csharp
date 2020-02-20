@@ -93,20 +93,6 @@ namespace Microsoft.Azure.Devices.E2ETests
         }
 
         [TestMethod]
-        public async Task FileUpload_SmallFile_Http4()
-        {
-            string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
-            await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
-        }
-
-        [TestMethod]
-        public async Task FileUpload_BigFile_Http4()
-        {
-            string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
-            await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
-        }
-
-        [TestMethod]
         public async Task FileUpload_SmallFile_Http5()
         {
             string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
@@ -129,6 +115,20 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         [TestMethod]
         public async Task FileUpload_BigFile_Http6()
+        {
+            string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_SmallFile_Http7()
+        {
+            string smallFile = await GetTestFileNameAsync(FileSizeSmall).ConfigureAwait(false);
+            await UploadFile(Client.TransportType.Http1, smallFile).ConfigureAwait(false);
+        }
+
+        [TestMethod]
+        public async Task FileUpload_BigFile_Http7()
         {
             string bigFile = await GetTestFileNameAsync(FileSizeBig).ConfigureAwait(false);
             await UploadFile(Client.TransportType.Http1, bigFile).ConfigureAwait(false);
