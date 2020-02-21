@@ -46,6 +46,10 @@ jobs:
 
           restartPolicy: unlessStopped
 
+      - task: Delay@1
+        inputs:
+          delayForMinutes: '1' 
+
       - task: UseDotNet@2
         displayName: "Install .NET Core App 1.1"
         inputs:
