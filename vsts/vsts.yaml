@@ -8,9 +8,21 @@ jobs:
     displayName: Linux
     strategy:
       # Change maxParallel to 1 make builds run in serial rather than in parallel
-      maxParallel: 3
+      maxParallel: 300
       matrix:
         .Net Core 2.1:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 1:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 2:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 3:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 4:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 5:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 6:
           FRAMEWORK: netcoreapp2.1
         .Net Core 1.1:
           FRAMEWORK: netcoreapp1.1
@@ -121,9 +133,21 @@ jobs:
     displayName: Windows
     strategy:
       # Change maxParallel to 1 make builds run in serial rather than in parallel
-      maxParallel: 3
+      maxParallel: 300
       matrix:
         .Net Core 2.1:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 1:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 2:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 3:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 4:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 5:
+          FRAMEWORK: netcoreapp2.1
+        .Net Core 2.1 6:
           FRAMEWORK: netcoreapp2.1
         .Net Core 1.1:
           FRAMEWORK: netcoreapp1.1
