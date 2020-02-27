@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
+using Newtonsoft.Json;
+
 namespace Microsoft.Azure.Devices
 {
-    using System;
-    using Newtonsoft.Json;
-
     /// <summary>
     /// Contains properties of a Job.
     /// </summary>
@@ -16,7 +16,7 @@ namespace Microsoft.Azure.Devices
         /// </summary>
         public JobProperties()
         {
-            this.JobId = string.Empty;
+            JobId = string.Empty;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Microsoft.Azure.Devices
         public DateTime? StartTimeUtc { get; set; }
 
         /// <summary>
-        /// System generated.  Ignored at creation.
+        /// System generated. Ignored at creation.
         /// Represents the time the job stopped processing.
         /// </summary>
         [JsonProperty(PropertyName = "endTimeUtc", NullValueHandling = NullValueHandling.Ignore)]
@@ -52,7 +52,7 @@ namespace Microsoft.Azure.Devices
         public JobStatus Status { get; set; }
 
         /// <summary>
-        /// System generated.  Ignored at creation.
+        /// System generated. Ignored at creation.
         /// Represents the percentage of completion.
         /// </summary>
         [JsonProperty(PropertyName = "progress", NullValueHandling = NullValueHandling.Ignore)]
@@ -84,14 +84,21 @@ namespace Microsoft.Azure.Devices
         public string OutputBlobName { get; set; }
 
         /// <summary>
-        /// Optional for export jobs; ignored for other jobs.  Default: false.  If false, authorization keys are included
-        /// in export output.  Keys are exported as null otherwise.
+        /// Specifies authentication type being used for connecting to a storage account.
+        /// </summary>
+        /// <remarks>Defaults to KeyBased authentication.</remarks>
+        [JsonProperty(PropertyName = "storageAuthenticationType", Required = Required.Always)]
+        public StorageAuthenticationType StorageAuthenticationType { get; set; } = StorageAuthenticationType.KeyBased;
+
+        /// <summary>
+        /// Optional for export jobs; ignored for other jobs. Default: false. If false, authorization keys are included
+        /// in export output. Keys are exported as null otherwise.
         /// </summary>
         [JsonProperty(PropertyName = "excludeKeysInExport", NullValueHandling = NullValueHandling.Ignore)]
         public bool ExcludeKeysInExport { get; set; }
 
         /// <summary>
-        /// System genereated.  Ignored at creation.
+        /// System genereated. Ignored at creation.
         /// If status == failure, this represents a string containing the reason.
         /// </summary>
         [JsonProperty(PropertyName = "failureReason", NullValueHandling = NullValueHandling.Ignore)]
