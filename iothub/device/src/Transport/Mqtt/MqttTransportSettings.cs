@@ -1,16 +1,20 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using DotNetty.Codecs.Mqtt.Packets;
-using Microsoft.Azure.Devices.Client.Extensions;
-using Microsoft.Azure.Devices.Shared;
 using System;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using DotNetty.Codecs.Mqtt.Packets;
+using Microsoft.Azure.Devices.Client.Extensions;
+using Microsoft.Azure.Devices.Shared;
+using Microsoft.WindowsAzure.Storage.Blob.Protocol;
 
 namespace Microsoft.Azure.Devices.Client.Transport.Mqtt
 {
+    /// <summary>
+    ///
+    /// </summary>
     public class MqttTransportSettings : ITransportSettings
     {
         private readonly TransportType _transportType;
@@ -26,11 +30,11 @@ namespace Microsoft.Azure.Devices.Client.Transport.Mqtt
         private const QualityOfService DefaultReceivingQoS = QualityOfService.AtLeastOnce;
         private static readonly TimeSpan DefaultConnectArrivalTimeout = TimeSpan.FromSeconds(10);
         private static readonly TimeSpan DefaultDeviceReceiveAckTimeout = TimeSpan.FromSeconds(300);
-        /// <summary>
-        /// To enable certificate revocation check. Default to be false.
-        /// </summary>
-        public bool CertificateRevocationCheck = false;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="transportType"></param>
         public MqttTransportSettings(TransportType transportType)
         {
             _transportType = transportType;
@@ -69,6 +73,8 @@ namespace Microsoft.Azure.Devices.Client.Transport.Mqtt
             DefaultReceiveTimeout = TimeSpan.FromSeconds(DefaultReceiveTimeoutInSeconds);
         }
 
+        public TimeSpan DefaultReceiveTimeout { get; set; }
+
         public bool DeviceReceiveAckCanTimeout { get; set; }
 
         public TimeSpan DeviceReceiveAckTimeout { get; set; }
@@ -102,13 +108,10 @@ namespace Microsoft.Azure.Devices.Client.Transport.Mqtt
             return _transportType;
         }
 
-        public TimeSpan DefaultReceiveTimeout { get; set; }
-
         public RemoteCertificateValidationCallback RemoteCertificateValidationCallback { get; set; }
 
         public X509Certificate ClientCertificate { get; set; }
 
         public IWebProxy Proxy { get; set; }
-
     }
 }

@@ -31,7 +31,7 @@ namespace Microsoft.Azure.Devices
         /// <returns> A JobClient instance. </returns>
         public static JobClient CreateFromConnectionString(string connectionString, HttpTransportSettings transportSettings)
         {
-            TlsVersions.Instance.SetLegacyAcceptableVersions();
+            TlsVersions.Instance.SetLegacyAcceptableVersions(); // if net451 otherwise it needs to be set for the right transport
 
             var iotHubConnectionString = IotHubConnectionString.Parse(connectionString);
             return new HttpJobClient(iotHubConnectionString, transportSettings);
@@ -48,7 +48,7 @@ namespace Microsoft.Azure.Devices
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing) {}
+        protected virtual void Dispose(bool disposing) { }
 
         /// <summary>
         /// Explicitly open the JobClient instance.
@@ -74,7 +74,6 @@ namespace Microsoft.Azure.Devices
         /// <param name="cancellationToken">Task cancellation token</param>
         /// <returns>The matching JobResponse object</returns>
         public abstract Task<JobResponse> GetJobAsync(string jobId, CancellationToken cancellationToken);
-
 
         /// <summary>
         /// Get IQuery through which job responses for all job types and statuses are retrieved page by page

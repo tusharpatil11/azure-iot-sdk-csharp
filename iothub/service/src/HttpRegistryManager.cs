@@ -44,16 +44,18 @@ namespace Microsoft.Azure.Devices
         private const string ApplyConfigurationOnDeviceUriFormat = "/devices/{0}/applyConfigurationContent?" + ClientApiVersionHelper.ApiVersionQueryString;
 
         private static readonly TimeSpan regexTimeoutMilliseconds = TimeSpan.FromMilliseconds(500);
+
         private static readonly Regex DeviceIdRegex = new Regex(
-            @"^[A-Za-z0-9\-:.+%_#*?!(),=@;$']{1,128}$", 
+            @"^[A-Za-z0-9\-:.+%_#*?!(),=@;$']{1,128}$",
             RegexOptions.Compiled | RegexOptions.IgnoreCase,
             regexTimeoutMilliseconds);
 
         private static readonly TimeSpan DefaultOperationTimeout = TimeSpan.FromSeconds(100);
         private static readonly TimeSpan DefaultGetDevicesOperationTimeout = TimeSpan.FromSeconds(120);
 
-        IHttpClientHelper httpClientHelper;
-        readonly string iotHubName;
+        private IHttpClientHelper httpClientHelper;
+        private readonly string iotHubName;
+        private readonly bool checkCertificationRevocationList = TlsVersions.Instance.CertificateRevocationCheck;
 
         internal HttpRegistryManager(IotHubConnectionString connectionString, HttpTransportSettings transportSettings)
         {
@@ -64,7 +66,8 @@ namespace Microsoft.Azure.Devices
                 ExceptionHandlingHelper.GetDefaultErrorMapping(),
                 DefaultOperationTimeout,
                 client => { },
-                transportSettings.Proxy);
+                transportSettings.Proxy,
+                checkCertificationRevocationList);
         }
 
         // internal test helper
@@ -161,7 +164,6 @@ namespace Microsoft.Azure.Devices
             };
 
             return this.httpClientHelper.PutAsync(GetModulesRequestUri(module.DeviceId, module.Id), module, PutOperationType.CreateEntity, errorMappingOverrides, cancellationToken);
-
         }
 
         public override Task<BulkRegistryOperationResult> AddDeviceWithTwinAsync(Device device, Twin twin)
@@ -180,7 +182,7 @@ namespace Microsoft.Azure.Devices
 
             var exportImportDevice = new ExportImportDevice(device, ImportMode.Create);
             exportImportDevice.Tags = twin?.Tags;
-            exportImportDevice.Properties =  new ExportImportDevice.PropertyContainer();
+            exportImportDevice.Properties = new ExportImportDevice.PropertyContainer();
             exportImportDevice.Properties.DesiredProperties = twin?.Properties.Desired;
             exportImportDevice.Properties.ReportedProperties = twin?.Properties.Reported;
 
@@ -258,7 +260,6 @@ namespace Microsoft.Azure.Devices
                         return (Exception)new DeviceNotFoundException(responseContent, (Exception)null);
                     }
                 }
-
             };
 
             PutOperationType operationType = forceUpdate ? PutOperationType.ForceUpdateEntity : PutOperationType.UpdateEntity;
@@ -310,7 +311,6 @@ namespace Microsoft.Azure.Devices
                         return (Exception)new ModuleNotFoundException(responseContent, (Exception)null);
                     }
                 }
-
             };
 
             PutOperationType operationType = forceUpdate ? PutOperationType.ForceUpdateEntity : PutOperationType.UpdateEntity;
@@ -467,7 +467,7 @@ namespace Microsoft.Azure.Devices
             return this.httpClientHelper.PostAsync(GetApplyConfigurationOnDeviceRequestUri(deviceId), content, null, null, cancellationToken);
         }
 
-        Task RemoveConfigurationAsync(string configurationId, IETagHolder eTagHolder, CancellationToken cancellationToken)
+        private Task RemoveConfigurationAsync(string configurationId, IETagHolder eTagHolder, CancellationToken cancellationToken)
         {
             var errorMappingOverrides = new Dictionary<HttpStatusCode, Func<HttpResponseMessage, Task<Exception>>>
             {
@@ -731,9 +731,9 @@ namespace Microsoft.Azure.Devices
                 this.httpClientHelper.Dispose();
                 this.httpClientHelper = null;
             }
-        } 
+        }
 
-        static IEnumerable<ExportImportDevice> GenerateExportImportDeviceListForBulkOperations(IEnumerable<Device> devices, ImportMode importMode)
+        private static IEnumerable<ExportImportDevice> GenerateExportImportDeviceListForBulkOperations(IEnumerable<Device> devices, ImportMode importMode)
         {
             if (devices == null)
             {
@@ -792,7 +792,7 @@ namespace Microsoft.Azure.Devices
             return exportImportDeviceList;
         }
 
-        static IEnumerable<ExportImportDevice> GenerateExportImportDeviceListForTwinBulkOperations(IEnumerable<Twin> twins, ImportMode importMode)
+        private static IEnumerable<ExportImportDevice> GenerateExportImportDeviceListForTwinBulkOperations(IEnumerable<Twin> twins, ImportMode importMode)
         {
             if (twins == null)
             {
@@ -841,7 +841,7 @@ namespace Microsoft.Azure.Devices
             return exportImportDeviceList;
         }
 
-        Task<T> BulkDeviceOperationsAsync<T>(IEnumerable<ExportImportDevice> devices, string version, CancellationToken cancellationToken)
+        private Task<T> BulkDeviceOperationsAsync<T>(IEnumerable<ExportImportDevice> devices, string version, CancellationToken cancellationToken)
         {
             this.BulkDeviceOperationSetup(devices);
 
@@ -855,7 +855,7 @@ namespace Microsoft.Azure.Devices
             return this.httpClientHelper.PostAsync<IEnumerable<ExportImportDevice>, T>(GetBulkRequestUri(version), devices, errorMappingOverrides, null, cancellationToken);
         }
 
-        void BulkDeviceOperationSetup(IEnumerable<ExportImportDevice> devices)
+        private void BulkDeviceOperationSetup(IEnumerable<ExportImportDevice> devices)
         {
             this.EnsureInstanceNotClosed();
 
@@ -870,7 +870,6 @@ namespace Microsoft.Azure.Devices
 
                 NormalizeExportImportDevice(device);
             }
-
         }
 
         public override Task ExportRegistryAsync(string storageAccountConnectionString, string containerName)
@@ -996,7 +995,7 @@ namespace Microsoft.Azure.Devices
             return this.CreateJobAsync(jobProperties, ct);
         }
 
-        Task<JobProperties> CreateJobAsync(JobProperties jobProperties, CancellationToken ct)
+        private Task<JobProperties> CreateJobAsync(JobProperties jobProperties, CancellationToken ct)
         {
             this.EnsureInstanceNotClosed();
 
@@ -1217,7 +1216,7 @@ namespace Microsoft.Azure.Devices
             return this.UpdateTwinInternalAsync(deviceId, newTwin, etag, cancellationToken, true);
         }
 
-        Task<Twin> UpdateTwinInternalAsync(string deviceId, Twin twin, string etag, CancellationToken cancellationToken, bool isReplace)
+        private Task<Twin> UpdateTwinInternalAsync(string deviceId, Twin twin, string etag, CancellationToken cancellationToken, bool isReplace)
         {
             this.EnsureInstanceNotClosed();
 
@@ -1267,7 +1266,7 @@ namespace Microsoft.Azure.Devices
             }
         }
 
-        Task<Twin> UpdateTwinInternalAsync(string deviceId, string moduleId, Twin twin, string etag, CancellationToken cancellationToken, bool isReplace)
+        private Task<Twin> UpdateTwinInternalAsync(string deviceId, string moduleId, Twin twin, string etag, CancellationToken cancellationToken, bool isReplace)
         {
             this.EnsureInstanceNotClosed();
 
@@ -1341,7 +1340,7 @@ namespace Microsoft.Azure.Devices
                 cancellationToken);
         }
 
-        Task RemoveDeviceAsync(string deviceId, IETagHolder eTagHolder, CancellationToken cancellationToken)
+        private Task RemoveDeviceAsync(string deviceId, IETagHolder eTagHolder, CancellationToken cancellationToken)
         {
             var errorMappingOverrides = new Dictionary<HttpStatusCode, Func<HttpResponseMessage, Task<Exception>>>
             {
@@ -1357,7 +1356,7 @@ namespace Microsoft.Azure.Devices
             return this.httpClientHelper.DeleteAsync(GetRequestUri(deviceId), eTagHolder, errorMappingOverrides, null, cancellationToken);
         }
 
-        Task RemoveDeviceModuleAsync(string deviceId, string moduleId, IETagHolder eTagHolder, CancellationToken cancellationToken)
+        private Task RemoveDeviceModuleAsync(string deviceId, string moduleId, IETagHolder eTagHolder, CancellationToken cancellationToken)
         {
             var errorMappingOverrides = new Dictionary<HttpStatusCode, Func<HttpResponseMessage, Task<Exception>>>
             {
@@ -1373,74 +1372,74 @@ namespace Microsoft.Azure.Devices
             return this.httpClientHelper.DeleteAsync(GetModulesRequestUri(deviceId, moduleId), eTagHolder, errorMappingOverrides, null, cancellationToken);
         }
 
-        static Uri GetRequestUri(string deviceId)
+        private static Uri GetRequestUri(string deviceId)
         {
             deviceId = WebUtility.UrlEncode(deviceId);
             return new Uri(RequestUriFormat.FormatInvariant(deviceId, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetModulesRequestUri(string deviceId, string moduleId)
+        private static Uri GetModulesRequestUri(string deviceId, string moduleId)
         {
             deviceId = WebUtility.UrlEncode(deviceId);
             moduleId = WebUtility.UrlEncode(moduleId);
             return new Uri(ModulesRequestUriFormat.FormatInvariant(deviceId, moduleId, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetModulesOnDeviceRequestUri(string deviceId)
+        private static Uri GetModulesOnDeviceRequestUri(string deviceId)
         {
             deviceId = WebUtility.UrlEncode(deviceId);
             return new Uri(ModulesOnDeviceRequestUriFormat.FormatInvariant(deviceId, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetModuleTwinRequestUri(string deviceId, string moduleId)
+        private static Uri GetModuleTwinRequestUri(string deviceId, string moduleId)
         {
             deviceId = WebUtility.UrlEncode(deviceId);
             moduleId = WebUtility.UrlEncode(moduleId);
             return new Uri(ModuleTwinUriFormat.FormatInvariant(deviceId, moduleId, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetConfigurationRequestUri(string configurationId)
+        private static Uri GetConfigurationRequestUri(string configurationId)
         {
             configurationId = WebUtility.UrlEncode(configurationId);
             return new Uri(ConfigurationRequestUriFormat.FormatInvariant(configurationId, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetConfigurationsRequestUri(int maxCount)
+        private static Uri GetConfigurationsRequestUri(int maxCount)
         {
             return new Uri(ConfigurationsRequestUriFormat.FormatInvariant(maxCount, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetApplyConfigurationOnDeviceRequestUri(string deviceId)
+        private static Uri GetApplyConfigurationOnDeviceRequestUri(string deviceId)
         {
             return new Uri(ApplyConfigurationOnDeviceUriFormat.FormatInvariant(deviceId), UriKind.Relative);
         }
 
-        static Uri GetBulkRequestUri(string apiVersionQueryString)
+        private static Uri GetBulkRequestUri(string apiVersionQueryString)
         {
             return new Uri(RequestUriFormat.FormatInvariant(string.Empty, apiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetJobUri(string jobId)
+        private static Uri GetJobUri(string jobId)
         {
             return new Uri(JobsUriFormat.FormatInvariant(jobId, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetDevicesRequestUri(int maxCount)
+        private static Uri GetDevicesRequestUri(int maxCount)
         {
             return new Uri(DevicesRequestUriFormat.FormatInvariant(maxCount, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri QueryDevicesRequestUri()
+        private static Uri QueryDevicesRequestUri()
         {
             return new Uri(DevicesQueryUriFormat, UriKind.Relative);
         }
 
-        static Uri GetAdminUri(string operation)
+        private static Uri GetAdminUri(string operation)
         {
             return new Uri(AdminUriFormat.FormatInvariant(operation, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static Uri GetStatisticsUri()
+        private static Uri GetStatisticsUri()
         {
             return new Uri(StatisticsUriFormat, UriKind.Relative);
         }
@@ -1463,7 +1462,7 @@ namespace Microsoft.Azure.Devices
             return new Uri(TwinDesiredPropertiesUriFormat.FormatInvariant(deviceId, ClientApiVersionHelper.ApiVersionQueryString), UriKind.Relative);
         }
 
-        static void ValidateDeviceId(Device device)
+        private static void ValidateDeviceId(Device device)
         {
             if (device == null)
             {
@@ -1481,7 +1480,7 @@ namespace Microsoft.Azure.Devices
             }
         }
 
-        static void ValidateTwinId(Twin twin)
+        private static void ValidateTwinId(Twin twin)
         {
             if (twin == null)
             {
@@ -1499,7 +1498,7 @@ namespace Microsoft.Azure.Devices
             }
         }
 
-        static void ValidateModuleId(Module module)
+        private static void ValidateModuleId(Module module)
         {
             if (module == null)
             {
@@ -1527,7 +1526,7 @@ namespace Microsoft.Azure.Devices
             }
         }
 
-        static void ValidateDeviceAuthentication(AuthenticationMechanism authentication, string deviceId)
+        private static void ValidateDeviceAuthentication(AuthenticationMechanism authentication, string deviceId)
         {
             if (authentication != null)
             {
@@ -1552,7 +1551,7 @@ namespace Microsoft.Azure.Devices
             }
         }
 
-        void EnsureInstanceNotClosed()
+        private void EnsureInstanceNotClosed()
         {
             if (this.httpClientHelper == null)
             {
@@ -1560,7 +1559,7 @@ namespace Microsoft.Azure.Devices
             }
         }
 
-        async Task<QueryResult> ExecuteQueryAsync(string sqlQueryString, int? pageSize, string continuationToken, CancellationToken cancellationToken)
+        private async Task<QueryResult> ExecuteQueryAsync(string sqlQueryString, int? pageSize, string continuationToken, CancellationToken cancellationToken)
         {
             this.EnsureInstanceNotClosed();
 
@@ -1595,7 +1594,7 @@ namespace Microsoft.Azure.Devices
             return await QueryResult.FromHttpResponseAsync(response).ConfigureAwait(false);
         }
 
-        static void NormalizeExportImportDevice(ExportImportDevice device)
+        private static void NormalizeExportImportDevice(ExportImportDevice device)
         {
             // auto generate keys if not specified
             if (device.Authentication == null)
@@ -1606,7 +1605,7 @@ namespace Microsoft.Azure.Devices
             NormalizeAuthenticationInfo(device.Authentication);
         }
 
-        static void NormalizeDevice(Device device)
+        private static void NormalizeDevice(Device device)
         {
             // auto generate keys if not specified
             if (device.Authentication == null)
@@ -1617,7 +1616,7 @@ namespace Microsoft.Azure.Devices
             NormalizeAuthenticationInfo(device.Authentication);
         }
 
-        static void NormalizeAuthenticationInfo(AuthenticationMechanism authenticationInfo)
+        private static void NormalizeAuthenticationInfo(AuthenticationMechanism authenticationInfo)
         {
             //to make it backward compatible we set the type according to the values
             //we don't set CA type - that has to be explicit

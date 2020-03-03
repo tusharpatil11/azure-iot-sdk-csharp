@@ -37,6 +37,11 @@ namespace Microsoft.Azure.Devices.Shared
         /// </remarks>
         public SslProtocols Preferred { get; private set; } = SslProtocols.None;
 
+        /// <summary>
+        /// To enable certificate revocation check
+        /// </summary>
+        public bool CertificateRevocationCheck { get; set; } = false;
+
 #if NET451
         private System.Net.SecurityProtocolType _net451Protocol = (System.Net.SecurityProtocolType)PreferredProtocol;
 #endif
@@ -93,6 +98,7 @@ namespace Microsoft.Azure.Devices.Shared
         {
 #if NET451
             System.Net.ServicePointManager.SecurityProtocol = _net451Protocol;
+            System.Net.ServicePointManager.CheckCertificateRevocationList = CertificateRevocationCheck;
 #endif
         }
     }

@@ -200,7 +200,7 @@ namespace Microsoft.Azure.Devices.Client.Transport.AmqpIoT
                 return true;
             }
 
-            if (!_amqpTransportSettings.CertificateRevocationCheck && sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors && CausedByRevocationCheckError(chain))
+            if (!TlsVersions.Instance.CertificateRevocationCheck && sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors && CausedByRevocationCheckError(chain))
             {
                 return true;
             }

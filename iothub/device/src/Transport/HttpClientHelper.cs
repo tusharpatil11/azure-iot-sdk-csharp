@@ -97,6 +97,7 @@ namespace Microsoft.Azure.Devices.Client.Transport
             {
                 httpClientHandler.ClientCertificates.Add(clientCert);
                 this.usingX509ClientCert = true;
+                httpClientHandler.CheckCertificateRevocationList = false;
             }
 
             if (proxy != DefaultWebProxySettings.Instance)
