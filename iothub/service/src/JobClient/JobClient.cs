@@ -31,7 +31,7 @@ namespace Microsoft.Azure.Devices
         /// <returns> A JobClient instance. </returns>
         public static JobClient CreateFromConnectionString(string connectionString, HttpTransportSettings transportSettings)
         {
-            TlsVersions.Instance.SetLegacyAcceptableVersions(); // if net451 otherwise it needs to be set for the right transport
+            TlsVersions.Instance.SetLegacyAcceptableVersions();
 
             var iotHubConnectionString = IotHubConnectionString.Parse(connectionString);
             return new HttpJobClient(iotHubConnectionString, transportSettings);

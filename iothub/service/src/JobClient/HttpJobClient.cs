@@ -24,7 +24,6 @@ namespace Microsoft.Azure.Devices
         private const string PageSizeHeader = "x-ms-max-item-count";
 
         private static readonly TimeSpan DefaultOperationTimeout = TimeSpan.FromSeconds(100);
-        private static readonly bool checkCertificationRevocationList = TlsVersions.Instance.CertificateRevocationCheck;
 
         private IHttpClientHelper httpClientHelper;
         private readonly string iotHubName;
@@ -38,8 +37,7 @@ namespace Microsoft.Azure.Devices
                 ExceptionHandlingHelper.GetDefaultErrorMapping(),
                 DefaultOperationTimeout,
                 client => { },
-                transportSettings.Proxy,
-                checkCertificationRevocationList);
+                transportSettings.Proxy);
         }
 
         // internal test helper

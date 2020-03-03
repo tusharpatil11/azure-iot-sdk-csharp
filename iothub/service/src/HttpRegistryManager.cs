@@ -55,7 +55,6 @@ namespace Microsoft.Azure.Devices
 
         private IHttpClientHelper httpClientHelper;
         private readonly string iotHubName;
-        private readonly bool checkCertificationRevocationList = TlsVersions.Instance.CertificateRevocationCheck;
 
         internal HttpRegistryManager(IotHubConnectionString connectionString, HttpTransportSettings transportSettings)
         {
@@ -66,8 +65,7 @@ namespace Microsoft.Azure.Devices
                 ExceptionHandlingHelper.GetDefaultErrorMapping(),
                 DefaultOperationTimeout,
                 client => { },
-                transportSettings.Proxy,
-                checkCertificationRevocationList);
+                transportSettings.Proxy);
         }
 
         // internal test helper

@@ -13,7 +13,7 @@ using Microsoft.WindowsAzure.Storage.Blob.Protocol;
 namespace Microsoft.Azure.Devices.Client.Transport.Mqtt
 {
     /// <summary>
-    ///
+    /// contains Mqtt transport-specific settings for DeviceClient
     /// </summary>
     public class MqttTransportSettings : ITransportSettings
     {
@@ -30,11 +30,8 @@ namespace Microsoft.Azure.Devices.Client.Transport.Mqtt
         private const QualityOfService DefaultReceivingQoS = QualityOfService.AtLeastOnce;
         private static readonly TimeSpan DefaultConnectArrivalTimeout = TimeSpan.FromSeconds(10);
         private static readonly TimeSpan DefaultDeviceReceiveAckTimeout = TimeSpan.FromSeconds(300);
+        public bool CertificateRevocationCheck = TlsVersions.Instance.CertificateRevocationCheck;
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="transportType"></param>
         public MqttTransportSettings(TransportType transportType)
         {
             _transportType = transportType;

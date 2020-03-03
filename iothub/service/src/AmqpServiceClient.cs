@@ -34,7 +34,6 @@ namespace Microsoft.Azure.Devices
         private readonly AmqpFileNotificationReceiver fileNotificationReceiver;
         private readonly IHttpClientHelper httpClientHelper;
         private readonly string iotHubName;
-        private readonly bool checkCertificationRevocationList; //set value
 
         private int sendingDeliveryTag;
 
@@ -49,15 +48,13 @@ namespace Microsoft.Azure.Devices
             this.feedbackReceiver = new AmqpFeedbackReceiver(this.iotHubConnection);
             this.fileNotificationReceiver = new AmqpFileNotificationReceiver(this.iotHubConnection);
             this.iotHubName = iotHubConnectionString.IotHubName;
-            this.checkCertificationRevocationList = TlsVersions.Instance.CertificateRevocationCheck;
             this.httpClientHelper = new HttpClientHelper(
                 iotHubConnectionString.HttpsEndpoint,
                 iotHubConnectionString,
                 ExceptionHandlingHelper.GetDefaultErrorMapping(),
                 DefaultOperationTimeout,
                 client => { },
-                transportSettings.HttpProxy,
-                checkCertificationRevocationList);
+                transportSettings.HttpProxy);
         }
 
         internal AmqpServiceClient(IotHubConnectionString iotHubConnectionString, bool useWebSocketOnly, IHttpClientHelper httpClientHelper) : base()

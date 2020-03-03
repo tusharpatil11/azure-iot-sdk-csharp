@@ -32,7 +32,6 @@ namespace Microsoft.Azure.Devices
         private readonly IAuthorizationHeaderProvider authenticationHeaderProvider;
         private readonly IReadOnlyDictionary<HttpStatusCode, Func<HttpResponseMessage, Task<Exception>>> defaultErrorMapping;
         private readonly TimeSpan defaultOperationTimeout;
-        private readonly bool checkCertificationRevocationList;
         private readonly IWebProxy customHttpProxy;
         private readonly Action<HttpClient> preRequestActionForAllRequests;
 
@@ -42,8 +41,7 @@ namespace Microsoft.Azure.Devices
             IDictionary<HttpStatusCode, Func<HttpResponseMessage, Task<Exception>>> defaultErrorMapping,
             TimeSpan timeout,
             Action<HttpClient> preRequestActionForAllRequests,
-            IWebProxy customHttpProxy,
-            bool checkCertificationRevocationList)
+            IWebProxy customHttpProxy)
         {
             this.baseAddress = baseAddress;
             this.authenticationHeaderProvider = authenticationHeaderProvider;
@@ -52,7 +50,6 @@ namespace Microsoft.Azure.Devices
             defaultOperationTimeout = timeout;
             this.preRequestActionForAllRequests = preRequestActionForAllRequests;
             this.customHttpProxy = customHttpProxy;
-            this.checkCertificationRevocationList = checkCertificationRevocationList;
             TlsVersions.Instance.SetLegacyAcceptableVersions();
         }
 
@@ -126,7 +123,7 @@ namespace Microsoft.Azure.Devices
                 }
                 else
                 {
-                    using (var httpClient = BuildHttpClient(defaultOperationTimeout, checkCertificationRevocationList))
+                    using (var httpClient = BuildHttpClient(defaultOperationTimeout))
                     {
                         await this.ExecuteAsync(
                            httpClient,
@@ -678,7 +675,7 @@ namespace Microsoft.Azure.Devices
             IDictionary<HttpStatusCode, Func<HttpResponseMessage, Task<Exception>>> errorMappingOverrides,
             CancellationToken cancellationToken)
         {
-            using (var httpClient = BuildHttpClient(this.defaultOperationTimeout, checkCertificationRevocationList))
+            using (var httpClient = BuildHttpClient(this.defaultOperationTimeout))
             {
                 await this.ExecuteAsync(
                     httpClient,
@@ -704,7 +701,7 @@ namespace Microsoft.Azure.Devices
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            using (var httpClient = BuildHttpClient(Timeout.InfiniteTimeSpan, checkCertificationRevocationList))
+            using (var httpClient = BuildHttpClient(Timeout.InfiniteTimeSpan))
             {
                 var cts = new CancellationTokenSource(operationTimeout);
                 CancellationTokenSource linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cts.Token);
@@ -849,13 +846,13 @@ namespace Microsoft.Azure.Devices
             return await exception.ConfigureAwait(false);
         }
 
-        private HttpClient BuildHttpClient(TimeSpan timeout, bool checkCertRevocationList)
+        private HttpClient BuildHttpClient(TimeSpan timeout)
         {
             var httpClientHandler = new HttpClientHandler
             {
 #if !NET451
                 SslProtocols = TlsVersions.Instance.Preferred,
-                CheckCertificateRevocationList = checkCertRevocationList,
+                CheckCertificateRevocationList = TlsVersions.Instance.CertificateRevocationCheck,
 #endif
             };
 
